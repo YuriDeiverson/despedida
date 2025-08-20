@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noite da Lingerie 🎀</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+<div class="bg-white shadow-xl rounded-2xl p-6 sm:p-8 w-full max-w-md">
+  <h1 class="text-3xl font-bold text-rose-800 text-center mb-4"> Despedida da Noiva</h1>
+  <p class="text-gray-600 text-center mb-8">Digite seu nome e escolha um item 💕</p>
+
+  <form id="form" class="space-y-6">
+    <div>
+      <label for="nome" class="text-sm font-medium text-gray-700">Seu nome:</label>
+      <input type="text" id="nome" placeholder="Maria da Silva" class="mt-1 w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-rose-500 transition" required>
+    </div>
+    
+    <div>
+      <label class="text-sm font-medium text-gray-700">Escolha seu presente:</label>
+      <div id="items" class="mt-2 grid grid-cols-2 gap-3">
+        </div>
+    </div>
+
+    <p id="erro" class="text-red-500 text-sm hidden font-semibold text-center"></p>
+    
+    <button type="submit" id="confirm" class="w-full bg-rose-700 text-white py-3 rounded-lg hover:bg-rose-800 transition-all duration-300 font-bold text-lg focus:outline-none focus:ring-4 focus:ring-rose-300">
+      Confirmar 💌
+    </button>
+  </form>
+</div>
+
+<script>
+const itemsData = ["Vinho 🍷", "Queijo 🧀", "Chocolate 🍫", "Flores 🌸", "Lingerie 💖", "Decoração 🎀"];
+let selectedItem = null;
+let itensOcupados = [];
+const form = document.getElementById("form");
+const confirmBtn = document.getElementById("confirm");
+const erro = document.getElementById("erro");
+
+function renderItems() {
+  const container = document.getElementById("items");
+  container.innerHTML = "";
+  itemsData.forEach(item => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = item;
+    const ocupado = itensOcupados.includes(item);
+    btn.className = `py-2 rounded-lg transition text-center text-sm font-medium ${
+      ocupado ? "bg-gray-300 text-gray-500 cursor-not-allowed line-through" : 
+      selectedItem === item ? "bg-rose-700 text-white ring-2 ring-rose-400" : 
+      "bg-rose-50 text-rose-800 hover:bg-rose-100"
+    }`;
+    btn.disabled = ocupado;
+    btn.onclick = () => {
+      if (ocupado) return;
+      selectedItem = selectedItem === item ? null : item;
+      renderItems();
+    };
+    container.appendChild(btn);
+  });
+}
+
+async function fetchItensOcupados() {
+  try {
+    const res = await fetch("/api/itens-escolhidos"); // URL relativa para Vercel
+    if (!res.ok) throw new Error("Falha ao buscar lista de itens.");
+    const data = await res.json();
+    itensOcupados = data || [];
+    renderItems();
+  } catch (err) {
+    console.error("Erro ao buscar itens ocupados:", err);
+    erro.textContent = "Não foi possível carregar a lista. Verifique se o servidor está rodando.";
+    erro.classList.remove("hidden");
+  }
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nome = document.getElementById("nome").value.trim();
+  if (!nome || !selectedItem) {
+    erro.textContent = "Preencha seu nome e escolha um item!";
+    erro.classList.remove("hidden");
+    return;
+  }
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = "Confirmando...";
+  erro.classList.add("hidden");
+  try {
+    const res = await fetch("/api/confirmar", { // URL relativa para Vercel
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome, item: selectedItem })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+    const numeroWhats = "5582994041793";
+    const msg = `Oi! Eu, ${nome}, vou levar: ${selectedItem} para a despedida! :)`;
+    window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, "_blank");
+    document.getElementById("nome").value = "";
+    selectedItem = null;
+    fetchItensOcupados();
+  } catch (err) {
+    erro.textContent = err.message || "Erro ao enviar. Tente novamente!";
+    erro.classList.remove("hidden");
+    console.error(err);
+  } finally {
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = "Confirmar 💌";
+  }
+});
+
+fetchItensOcupados();
+</script>
+</body>
+</html>
