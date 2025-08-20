@@ -4,3 +4,4 @@ node_modules
 # Arquivos de ambiente com segredos
 .env
 .env.development.local
+.vercel
