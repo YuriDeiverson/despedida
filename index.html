@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Noite da Lingerie 🎀</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 <div class="bg-white shadow-xl rounded-2xl p-6 sm:p-8 w-full max-w-md">
@@ -19,8 +21,7 @@
     
     <div>
       <label class="text-sm font-medium text-gray-700">Escolha algo para levar: </label>
-      <div id="items" class="mt-2 grid grid-cols-2 gap-3">
-        </div>
+      <div id="items" class="mt-2 grid grid-cols-2 gap-3"></div>
     </div>
 
     <p id="erro" class="text-red-500 text-sm hidden font-semibold text-center"></p>
@@ -77,7 +78,7 @@ function renderItems() {
 
 async function fetchItensOcupados() {
   try {
-    const res = await fetch("/api/itens-escolhidos"); // URL relativa para Vercel
+    const res = await fetch("/api/itens-escolhidos");
     if (!res.ok) throw new Error("Falha ao buscar lista de itens.");
     const data = await res.json();
     itensOcupados = data || [];
@@ -101,16 +102,28 @@ form.addEventListener("submit", async (e) => {
   confirmBtn.textContent = "Confirmando...";
   erro.classList.add("hidden");
   try {
-    const res = await fetch("/api/confirmar", { // URL relativa para Vercel
+    const res = await fetch("/api/confirmar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nome, item: selectedItem })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error);
+
     const numeroWhats = "5582994041793";
     const msg = `Oi! Eu, ${nome}, vou levar: ${selectedItem} para a despedida! :)`;
-    window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, "_blank");
+
+    // ALERTA estilizado ANTES do redirecionamento
+    Swal.fire({
+      title: "Confirmado! 🎉",
+      text: "Você será redirecionado para o WhatsApp.",
+      icon: "success",
+      confirmButtonText: "Ir para o WhatsApp",
+      confirmButtonColor: "#be123c"
+    }).then(() => {
+      window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, "_blank");
+    });
+
     document.getElementById("nome").value = "";
     selectedItem = null;
     fetchItensOcupados();
