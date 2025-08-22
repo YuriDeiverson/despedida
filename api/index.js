@@ -11,7 +11,7 @@ const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL;
 // Rota para buscar os itens já escolhidos
 app.get("/api/itens-escolhidos", async (req, res) => {
   try {
-    const response = await fetch(APPS_SCRIPT_URL); 
+    const response = await fetch(APPS_SCRIPT_URL);
     const data = await response.json();
     if (data.status === "sucesso") res.json(data.itens);
     else res.status(500).json({ error: data.mensagem });
@@ -20,18 +20,28 @@ app.get("/api/itens-escolhidos", async (req, res) => {
   }
 });
 
-// Rota para confirmar uma nova escolha
+// Rota para confirmar uma nova escolha (agora aceita múltiplos itens)
 app.post("/api/confirmar", async (req, res) => {
   const { nome, item } = req.body;
-  if (!nome || !item) return res.status(400).json({ error: "Nome e item são obrigatórios" });
+
+  if (!nome || !item || !Array.isArray(item) || item.length === 0) {
+    return res.status(400).json({ error: "Nome e pelo menos um item são obrigatórios" });
+  }
+
   try {
-    const response = await fetch(APPS_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome, item })
-    });
-    const data = await response.json();
-    if (data.status === "erro") return res.status(400).json({ error: data.mensagem });
+    // Envia cada item individualmente para o Apps Script
+    for (const i of item) {
+      const response = await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, item: i }) // envia 1 por vez
+      });
+      const data = await response.json();
+      if (data.status === "erro") {
+        return res.status(400).json({ error: data.mensagem });
+      }
+    }
+
     res.json({ success: true, message: "Confirmação enviada!" });
   } catch (err) {
     res.status(500).json({ error: "Erro interno ao se comunicar com a planilha." });

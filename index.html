@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Noite da Lingerie 🎀</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 <div class="bg-white shadow-xl rounded-2xl p-6 sm:p-8 w-full max-w-md">
-  <h1 class="text-3xl font-bold text-rose-800 text-center mb-4"> Despedida da Noiva</h1>
-  <p class="text-gray-600 text-center mb-8">Digite seu nome e escolha um item 💕</p>
+  <h1 class="text-3xl font-bold text-rose-800 text-center mb-4">Despedida da Noiva</h1>
+  <p class="text-gray-600 text-center mb-8">Digite seu nome e escolha os itens 💕</p>
 
   <form id="form" class="space-y-6">
     <div>
@@ -20,7 +18,7 @@
     </div>
     
     <div>
-      <label class="text-sm font-medium text-gray-700">Escolha algo para levar: </label>
+      <label class="text-sm font-medium text-gray-700">Escolha os itens: </label>
       <div id="items" class="mt-2 grid grid-cols-2 gap-3"></div>
     </div>
 
@@ -42,12 +40,13 @@ const itemsData = [
   "50 bolinhas de carne",
   "Docinhos variados",
   "15 cookies",
-  "1 garrafa de vinho rosé (Chalise)",
+  "1x garrafa de vinho rosé (Chalise)",
   "1 garrafa de vinho rosé (Chalise)",
   "2L de suco de uva",
   "2 garrafas de Coca-Cola Zero"
 ];
-let selectedItem = null;
+
+let selectedItems = [];
 let itensOcupados = [];
 const form = document.getElementById("form");
 const confirmBtn = document.getElementById("confirm");
@@ -61,15 +60,20 @@ function renderItems() {
     btn.type = "button";
     btn.textContent = item;
     const ocupado = itensOcupados.includes(item);
+    const selecionado = selectedItems.includes(item);
     btn.className = `py-2 rounded-lg transition text-center text-sm font-medium ${
       ocupado ? "bg-gray-300 text-gray-500 cursor-not-allowed line-through" : 
-      selectedItem === item ? "bg-rose-700 text-white ring-2 ring-rose-400" : 
+      selecionado ? "bg-rose-700 text-white ring-2 ring-rose-400" : 
       "bg-rose-50 text-rose-800 hover:bg-rose-100"
     }`;
     btn.disabled = ocupado;
     btn.onclick = () => {
       if (ocupado) return;
-      selectedItem = selectedItem === item ? null : item;
+      if (selecionado) {
+        selectedItems = selectedItems.filter(i => i !== item);
+      } else {
+        selectedItems.push(item);
+      }
       renderItems();
     };
     container.appendChild(btn);
@@ -93,39 +97,48 @@ async function fetchItensOcupados() {
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const nome = document.getElementById("nome").value.trim();
-  if (!nome || !selectedItem) {
-    erro.textContent = "Preencha seu nome e escolha um item!";
+  if (!nome || selectedItems.length === 0) {
+    erro.textContent = "Preencha seu nome e escolha pelo menos um item!";
     erro.classList.remove("hidden");
     return;
   }
+
   confirmBtn.disabled = true;
   confirmBtn.textContent = "Confirmando...";
   erro.classList.add("hidden");
+
   try {
     const res = await fetch("/api/confirmar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome, item: selectedItem })
+      body: JSON.stringify({ nome, item: selectedItems })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error);
 
-    const numeroWhats = "5582994041793";
-    const msg = `Oi! Eu, ${nome}, vou levar: ${selectedItem} para a despedida! :)`;
-
-    // ALERTA estilizado ANTES do redirecionamento
-    Swal.fire({
-      title: "Confirmado! 🎉",
-      text: "Você será redirecionado para o WhatsApp.",
-      icon: "success",
-      confirmButtonText: "Ir para o WhatsApp",
-      confirmButtonColor: "#be123c"
-    }).then(() => {
+    // Alerta profissional usando SweetAlert2
+    if (typeof Swal !== "undefined") {
+      Swal.fire({
+        title: 'Confirmado!',
+        text: `Obrigado, ${nome}! Você selecionou: ${selectedItems.join(", ")}`,
+        icon: 'success',
+        confirmButtonColor: '#e11d48',
+        confirmButtonText: 'Ir para o WhatsApp'
+      }).then(() => {
+        const numeroWhats = "5582994041793";
+        const msg = `Oi! Eu, ${nome}, vou levar: ${selectedItems.join(", ")} para a despedida! :)`;
+        window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, "_blank");
+      });
+    } else {
+      alert(`Obrigado, ${nome}! Você selecionou: ${selectedItems.join(", ")}`);
+      const numeroWhats = "5582994041793";
+      const msg = `Oi! Eu, ${nome}, vou levar: ${selectedItems.join(", ")} para a despedida! :)`;
       window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, "_blank");
-    });
+    }
 
+    // Reset
     document.getElementById("nome").value = "";
-    selectedItem = null;
+    selectedItems = [];
     fetchItensOcupados();
   } catch (err) {
     erro.textContent = err.message || "Erro ao enviar. Tente novamente!";
@@ -139,5 +152,8 @@ form.addEventListener("submit", async (e) => {
 
 fetchItensOcupados();
 </script>
+
+<!-- Adicionar SweetAlert2 para alertas profissionais -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
