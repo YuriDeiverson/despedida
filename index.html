@@ -120,19 +120,19 @@ form.addEventListener("submit", async (e) => {
     if (typeof Swal !== "undefined") {
       Swal.fire({
         title: 'Confirmado!',
-        text: `Obrigado, você será redirecionado para o WhatsApp.`,
+        text: `Obrigado! você será redirecionado para o WhatsApp.`,
         icon: 'success',
         confirmButtonColor: '#e11d48',
         confirmButtonText: 'Ir para o WhatsApp'
       }).then(() => {
         const numeroWhats = "5582994041793";
-        const msg = `Oi! Eu, ${nome}, vou levar: ${selectedItems.join(", ")} para a despedida! :)`;
+        const msg = `Oi! Ja fiz minha confirmação na despedida!`;
         window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, "_blank");
       });
     } else {
       alert(`Obrigado, ${nome}! Você selecionou: ${selectedItems.join(", ")}`);
       const numeroWhats = "5582994041793";
-      const msg = `Oi! Eu, ${nome}, vou levar: ${selectedItems.join(", ")} para a despedida! :)`;
+      const msg = `Oi! Ja fiz minha confirmação na despedida!`;
       window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, "_blank");
     }
 
