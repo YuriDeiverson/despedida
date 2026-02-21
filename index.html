@@ -110,47 +110,53 @@
     }
 
     /* Item buttons */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
     .item-btn {
-      padding: 10px 8px;
-      border-radius: 12px;
+      padding: 8px 5px;
+      border-radius: 10px;
       border: 1.5px solid transparent;
       font-family: 'Lato', sans-serif;
-      font-size: 0.82rem;
+      font-size: 0.75rem;
       font-weight: 600;
       text-align: center;
       cursor: pointer;
-      transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
+      transition: all 0.2s ease;
+      line-height: 1.3;
     }
 
     .item-btn.available {
       background: linear-gradient(135deg, rgba(232,213,183,0.5), rgba(245,237,224,0.9));
-      border-color: rgba(196,113,74,0.3);
+      border-color: rgba(196,113,74,0.25);
       color: var(--brown);
     }
 
     .item-btn.available:hover {
       background: linear-gradient(135deg, rgba(196,113,74,0.15), rgba(201,139,133,0.2));
       border-color: var(--terracotta);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(196,113,74,0.25);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(196,113,74,0.2);
     }
 
     .item-btn.selected {
       background: linear-gradient(135deg, var(--terracotta), var(--dusty-rose));
       border-color: var(--terracotta);
       color: white;
-      box-shadow: 0 4px 14px rgba(196,113,74,0.4);
-      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(196,113,74,0.35);
     }
 
     .item-btn.taken {
-      background: rgba(200,200,200,0.3);
-      border-color: rgba(150,150,150,0.2);
-      color: #aaa;
+      background: rgba(200,200,200,0.25);
+      border-color: rgba(150,150,150,0.15);
+      color: #bbb;
       cursor: not-allowed;
       text-decoration: line-through;
+      font-size: 0.7rem;
     }
 
     /* Category labels */
@@ -226,6 +232,75 @@
       z-index: 0;
     }
 
+    /* Per-category collapsible blocks */
+    .cat-block {
+      border: 1.5px solid rgba(196,113,74,0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(255,252,245,0.6);
+      transition: box-shadow 0.2s;
+    }
+    .cat-block:hover {
+      box-shadow: 0 2px 12px rgba(196,113,74,0.1);
+    }
+
+    .cat-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 11px 14px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: 'Lato', sans-serif;
+      transition: background 0.2s ease;
+      text-align: left;
+    }
+    .cat-toggle:hover {
+      background: rgba(196,113,74,0.06);
+    }
+
+    .cat-toggle-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cat-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--brown);
+    }
+
+    .cat-count {
+      font-size: 0.75rem;
+      color: #a0856a;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+    }
+
+    .cat-arrow {
+      font-size: 0.72rem;
+      color: var(--terracotta);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    .cat-arrow.open { transform: rotate(180deg); }
+
+    .cat-panel {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+      padding: 0 12px;
+    }
+    .cat-panel.open {
+      max-height: 600px;
+      opacity: 1;
+      padding: 0 12px 10px;
+    }
+
     /* Tags para categorias */
     .tag {
       display: inline-block;
@@ -241,20 +316,6 @@
     .tag-p  { background: rgba(201,139,133,0.15); color: var(--dusty-rose); border: 1px solid rgba(201,139,133,0.3); }
     .tag-m  { background: rgba(138,158,126,0.15); color: var(--sage); border: 1px solid rgba(138,158,126,0.3); }
     .tag-g  { background: rgba(196,113,74,0.15); color: var(--terracotta); border: 1px solid rgba(196,113,74,0.3); }
-
-    .progress-bar-wrap {
-      background: rgba(196,113,74,0.1);
-      border-radius: 99px;
-      height: 6px;
-      overflow: hidden;
-      margin-top: 4px;
-    }
-
-    .progress-bar {
-      height: 100%;
-      border-radius: 99px;
-      transition: width 0.6s ease;
-    }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -308,35 +369,78 @@
       </div>
 
       <div>
-        <label>Escolha seu item 🌸</label>
+        <label style="display:block; margin-bottom:8px;">Escolha sua fralda 🌸</label>
 
-        <!-- RN -->
-        <div class="cat-label">
-          <span class="tag tag-rn">RN</span>
-          <span style="color:#aaa; font-size:0.8rem; font-style:normal; font-family:'Lato'">Recém-nascido · 5 vagas</span>
+        <!-- Preview do item selecionado -->
+        <div id="selected-preview" style="display:none; align-items:center; gap:8px; padding:10px 14px; background:linear-gradient(135deg,rgba(196,113,74,0.1),rgba(201,139,133,0.12)); border:1.5px dashed rgba(196,113,74,0.4); border-radius:10px; font-size:0.85rem; color:var(--brown); font-family:'Lato',sans-serif; margin-bottom:10px;">
+          ✔ Selecionado: <span id="preview-text" style="font-weight:700; color:var(--terracotta);"></span>
+          <button type="button" onclick="clearSelection()" style="margin-left:auto; color:var(--terracotta); font-size:0.85rem; font-weight:700; background:none; border:none; cursor:pointer;">✕ trocar</button>
         </div>
-        <div id="items-rn" class="grid grid-cols-1 gap-2 mb-2"></div>
 
-        <!-- P -->
-        <div class="cat-label">
-          <span class="tag tag-p">P</span>
-          <span style="color:#aaa; font-size:0.8rem; font-style:normal; font-family:'Lato'">Pequeno · 13 vagas</span>
-        </div>
-        <div id="items-p" class="grid grid-cols-1 gap-2 mb-2"></div>
+        <!-- Categorias recolhíveis individualmente -->
+        <div class="space-y-2" id="categories-wrap">
 
-        <!-- M -->
-        <div class="cat-label">
-          <span class="tag tag-m">M</span>
-          <span style="color:#aaa; font-size:0.8rem; font-style:normal; font-family:'Lato'">Médio · 25 vagas</span>
-        </div>
-        <div id="items-m" class="grid grid-cols-1 gap-2 mb-2"></div>
+          <!-- RN -->
+          <div class="cat-block">
+            <button type="button" class="cat-toggle" onclick="toggleCat('rn')">
+              <div class="cat-toggle-left">
+                <span class="tag tag-rn">RN</span>
+                <span class="cat-name">Recém-nascido</span>
+                <span class="cat-count" id="count-rn">5 vagas</span>
+              </div>
+              <span class="cat-arrow" id="arrow-rn">▼</span>
+            </button>
+            <div class="cat-panel" id="panel-rn">
+              <div id="items-rn" class="items-grid pt-2 pb-1"></div>
+            </div>
+          </div>
 
-        <!-- G -->
-        <div class="cat-label">
-          <span class="tag tag-g">G</span>
-          <span style="color:#aaa; font-size:0.8rem; font-style:normal; font-family:'Lato'">Grande · 7 vagas</span>
+          <!-- P -->
+          <div class="cat-block">
+            <button type="button" class="cat-toggle" onclick="toggleCat('p')">
+              <div class="cat-toggle-left">
+                <span class="tag tag-p">P</span>
+                <span class="cat-name">Tamanho Pequeno</span>
+                <span class="cat-count" id="count-p">13 vagas</span>
+              </div>
+              <span class="cat-arrow" id="arrow-p">▼</span>
+            </button>
+            <div class="cat-panel" id="panel-p">
+              <div id="items-p" class="items-grid pt-2 pb-1"></div>
+            </div>
+          </div>
+
+          <!-- M -->
+          <div class="cat-block">
+            <button type="button" class="cat-toggle" onclick="toggleCat('m')">
+              <div class="cat-toggle-left">
+                <span class="tag tag-m">M</span>
+                <span class="cat-name">Tamanho Médio</span>
+                <span class="cat-count" id="count-m">25 vagas</span>
+              </div>
+              <span class="cat-arrow" id="arrow-m">▼</span>
+            </button>
+            <div class="cat-panel" id="panel-m">
+              <div id="items-m" class="items-grid pt-2 pb-1"></div>
+            </div>
+          </div>
+
+          <!-- G -->
+          <div class="cat-block">
+            <button type="button" class="cat-toggle" onclick="toggleCat('g')">
+              <div class="cat-toggle-left">
+                <span class="tag tag-g">G</span>
+                <span class="cat-name">Tamanho Grande</span>
+                <span class="cat-count" id="count-g">7 vagas</span>
+              </div>
+              <span class="cat-arrow" id="arrow-g">▼</span>
+            </button>
+            <div class="cat-panel" id="panel-g">
+              <div id="items-g" class="items-grid pt-2 pb-1"></div>
+            </div>
+          </div>
+
         </div>
-        <div id="items-g" class="grid grid-cols-1 gap-2 mb-2"></div>
       </div>
 
       <p id="erro" class="text-red-500 text-sm hidden font-semibold text-center" style="font-family:'Lato'"></p>
@@ -350,52 +454,98 @@
 </div>
 
 <script>
-// Distribuição para 50 pessoas:
-// RN 10% = 5 vagas (fraldas RN)
-// P  25% = 13 vagas (fraldas P)  [12.5 arredondado p/ 13]
-// M  50% = 25 vagas (fraldas M)
-// G  15% = 7 vagas (fraldas G)   [7.5 arredondado p/ 7]
-// Total = 50
+// Cada item tem key única (usada internamente) e label exibido
+function makeItems(label, count) {
+  return Array.from({length: count}, (_, i) => ({
+    key: `${label}__${i}`,
+    label: label
+  }));
+}
 
 const itemsData = {
-  rn: Array.from({length: 5},  (_, i) => `🍼 Fralda RN — Vaga ${i+1}`),
-  p:  Array.from({length: 13}, (_, i) => `🧸 Fralda P — Vaga ${i+1}`),
-  m:  Array.from({length: 25}, (_, i) => `🌿 Fralda M — Vaga ${i+1}`),
-  g:  Array.from({length: 7},  (_, i) => `⭐ Fralda G — Vaga ${i+1}`),
+  rn: makeItems("Fralda RN", 5),
+  p:  makeItems("Fralda P",  13),
+  m:  makeItems("Fralda M",  25),
+  g:  makeItems("Fralda G",  7),
 };
 
+const catState = { rn: false, p: false, m: false, g: false };
+
 let selectedItem = null;
+let selectedLabel = null;
 let itensOcupados = [];
 
-const form   = document.getElementById("form");
+const form = document.getElementById("form");
 const confirmBtn = document.getElementById("confirm");
-const erro   = document.getElementById("erro");
+const erro = document.getElementById("erro");
 
-function renderCategory(containerId, items) {
-  const container = document.getElementById(containerId);
+function toggleCat(cat) {
+  catState[cat] = !catState[cat];
+  document.getElementById(`panel-${cat}`).classList.toggle("open", catState[cat]);
+  document.getElementById(`arrow-${cat}`).classList.toggle("open", catState[cat]);
+}
+
+function updateCounts() {
+  const cats = { rn: 5, p: 13, m: 25, g: 7 };
+  for (const [cat, total] of Object.entries(cats)) {
+    const items = itemsData[cat];
+    const livres = items.filter(i => !itensOcupados.includes(i)).length;
+    const el = document.getElementById(`count-${cat}`);
+    if (el) {
+      el.textContent = livres === 0 ? "Esgotado 🚫" : `${livres} de ${total} vagas`;
+      el.style.color = livres === 0 ? "#e57373" : "#a0856a";
+    }
+  }
+}
+
+function clearSelection() {
+  selectedItem = null;
+  selectedLabel = null;
+  renderAll();
+  updatePreview();
+}
+
+function updatePreview() {
+  const preview = document.getElementById("selected-preview");
+  const previewText = document.getElementById("preview-text");
+  if (selectedItem) {
+    preview.style.display = "flex";
+    previewText.textContent = selectedLabel;
+    const cat = selectedItem.includes("RN") ? "rn" : selectedItem.includes("__P") ? "p" : selectedItem.includes("__M") ? "m" : "g";
+    if (catState[cat]) toggleCat(cat);
+  } else {
+    preview.style.display = "none";
+  }
+}
+
+function renderCategory(cat, items) {
+  const container = document.getElementById("items-" + cat);
   container.innerHTML = "";
   items.forEach(item => {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.textContent = item;
-    const ocupado = itensOcupados.includes(item);
-    const selecionado = selectedItem === item;
-    btn.className = `item-btn ${ocupado ? "taken" : selecionado ? "selected" : "available"}`;
+    btn.textContent = item.label;
+    const ocupado = itensOcupados.includes(item.key);
+    const selecionado = selectedItem === item.key;
+    btn.className = "item-btn " + (ocupado ? "taken" : selecionado ? "selected" : "available");
     btn.disabled = ocupado;
     btn.onclick = () => {
       if (ocupado) return;
-      selectedItem = selecionado ? null : item;
+      selectedItem = selecionado ? null : item.key;
+      selectedLabel = selecionado ? null : item.label;
       renderAll();
+      updatePreview();
     };
     container.appendChild(btn);
   });
 }
 
 function renderAll() {
-  renderCategory("items-rn", itemsData.rn);
-  renderCategory("items-p",  itemsData.p);
-  renderCategory("items-m",  itemsData.m);
-  renderCategory("items-g",  itemsData.g);
+  renderCategory("rn", itemsData.rn);
+  renderCategory("p",  itemsData.p);
+  renderCategory("m",  itemsData.m);
+  renderCategory("g",  itemsData.g);
+  updateCounts();
 }
 
 async function fetchItensOcupados() {
@@ -438,7 +588,7 @@ form.addEventListener("submit", async (e) => {
     if (typeof Swal !== "undefined") {
       Swal.fire({
         title: '🌿 Confirmado!',
-        html: `<p style="font-family:'Lato',sans-serif; color:#6b4226;">Obrigada, <b>${nome}</b>!<br>Você escolheu: <b>${selectedItem}</b><br><br>Você será redirecionada para o WhatsApp 💛</p>`,
+        html: `<p style="font-family:'Lato',sans-serif; color:#6b4226;">Obrigada, <b>${nome}</b>!<br>Você escolheu: <b>${selectedLabel}</b><br><br>Você será redirecionada para o WhatsApp 💛</p>`,
         icon: 'success',
         confirmButtonColor: '#c4714a',
         confirmButtonText: 'Ir para o WhatsApp 🌿',
@@ -446,18 +596,20 @@ form.addEventListener("submit", async (e) => {
         iconColor: '#8a9e7e',
       }).then(() => {
         const numeroWhats = "5582994041793";
-        const msg = `Oi! Já fiz minha confirmação no Chá de Fralda! Escolhi: ${selectedItem} 🍼`;
+        const msg = `Oi! Já fiz minha confirmação no Chá de Fralda! Escolhi: ${selectedLabel} 🍼`;
         window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, "_blank");
       });
     } else {
-      alert(`Obrigada, ${nome}! Você escolheu: ${selectedItem}`);
+      alert(`Obrigada, ${nome}! Você escolheu: ${selectedLabel}`);
       const numeroWhats = "5582994041793";
-      const msg = `Oi! Já fiz minha confirmação no Chá de Fralda! Escolhi: ${selectedItem} 🍼`;
+      const msg = `Oi! Já fiz minha confirmação no Chá de Fralda! Escolhi: ${selectedLabel} 🍼`;
       window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, "_blank");
     }
 
     document.getElementById("nome").value = "";
     selectedItem = null;
+    selectedLabel = null;
+    updatePreview();
     fetchItensOcupados();
   } catch (err) {
     erro.textContent = err.message || "Erro ao enviar. Tente novamente!";
