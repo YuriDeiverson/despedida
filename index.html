@@ -3,107 +3,421 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Noite da Lingerie 🎀</title>
+  <title>Chá de Fralda 🌿</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --cream: #f5ede0;
+      --warm: #e8d5b7;
+      --sage: #8a9e7e;
+      --terracotta: #c4714a;
+      --brown: #6b4226;
+      --dusty-rose: #c98b85;
+      --gold: #b8860b;
+      --dark: #3d2b1f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background-color: var(--cream);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Boho Background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 10% 20%, rgba(196,113,74,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(138,158,126,0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(201,139,133,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Boho texture overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c4714a' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--brown);
+      text-shadow: 1px 2px 4px rgba(107,66,38,0.15);
+    }
+
+    .subtitle {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .card {
+      background: rgba(255, 252, 245, 0.92);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(196,113,74,0.2);
+      border-radius: 20px;
+      box-shadow:
+        0 4px 24px rgba(107,66,38,0.1),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--terracotta), var(--dusty-rose), var(--sage), var(--terracotta));
+    }
+
+    /* Boho decorative elements */
+    .boho-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 8px 0 16px;
+    }
+
+    .boho-divider::before,
+    .boho-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--terracotta), transparent);
+    }
+
+    .boho-icon {
+      color: var(--terracotta);
+      font-size: 1.1rem;
+    }
+
+    /* Item buttons */
+    .item-btn {
+      padding: 10px 8px;
+      border-radius: 12px;
+      border: 1.5px solid transparent;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .item-btn.available {
+      background: linear-gradient(135deg, rgba(232,213,183,0.5), rgba(245,237,224,0.9));
+      border-color: rgba(196,113,74,0.3);
+      color: var(--brown);
+    }
+
+    .item-btn.available:hover {
+      background: linear-gradient(135deg, rgba(196,113,74,0.15), rgba(201,139,133,0.2));
+      border-color: var(--terracotta);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(196,113,74,0.25);
+    }
+
+    .item-btn.selected {
+      background: linear-gradient(135deg, var(--terracotta), var(--dusty-rose));
+      border-color: var(--terracotta);
+      color: white;
+      box-shadow: 0 4px 14px rgba(196,113,74,0.4);
+      transform: translateY(-1px);
+    }
+
+    .item-btn.taken {
+      background: rgba(200,200,200,0.3);
+      border-color: rgba(150,150,150,0.2);
+      color: #aaa;
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+
+    /* Category labels */
+    .cat-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--terracotta);
+      margin-bottom: 8px;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Input */
+    input[type="text"] {
+      background: rgba(245,237,224,0.8);
+      border: 1.5px solid rgba(196,113,74,0.3);
+      border-radius: 10px;
+      padding: 12px 14px;
+      width: 100%;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      color: var(--dark);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--terracotta);
+      box-shadow: 0 0 0 3px rgba(196,113,74,0.15);
+    }
+
+    input[type="text"]::placeholder {
+      color: #bfa98a;
+    }
+
+    /* Submit button */
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--terracotta), var(--dusty-rose));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 18px rgba(196,113,74,0.35);
+      letter-spacing: 0.5px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(196,113,74,0.45);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Boho floating elements */
+    .boho-leaf {
+      position: fixed;
+      pointer-events: none;
+      opacity: 0.07;
+      font-size: 5rem;
+      z-index: 0;
+    }
+
+    /* Tags para categorias */
+    .tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .tag-rn { background: rgba(184,134,11,0.15); color: var(--gold); border: 1px solid rgba(184,134,11,0.3); }
+    .tag-p  { background: rgba(201,139,133,0.15); color: var(--dusty-rose); border: 1px solid rgba(201,139,133,0.3); }
+    .tag-m  { background: rgba(138,158,126,0.15); color: var(--sage); border: 1px solid rgba(138,158,126,0.3); }
+    .tag-g  { background: rgba(196,113,74,0.15); color: var(--terracotta); border: 1px solid rgba(196,113,74,0.3); }
+
+    .progress-bar-wrap {
+      background: rgba(196,113,74,0.1);
+      border-radius: 99px;
+      height: 6px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card { animation: fadeIn 0.6s ease both; }
+
+    label {
+      color: var(--brown);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-<div class="bg-white shadow-xl rounded-2xl p-6 sm:p-8 w-full max-w-md">
-  <h1 class="text-3xl font-bold text-rose-800 text-center mb-4">Despedida da Noiva</h1>
-  <p class="text-gray-600 text-center mb-8">Digite seu nome e escolha um item💕</p>
+<body>
 
-   <p class="text-gray-500 text-sm text-center mb-8">
-    (A noiva vai ficar muito feliz se cada convidada levar uma comidinha deliciosa. Vamos nos divertir!)
-  </p>
+<!-- Decorative leaves -->
+<span class="boho-leaf" style="top:5%;left:2%;transform:rotate(-20deg)">🌿</span>
+<span class="boho-leaf" style="top:40%;right:1%;transform:rotate(15deg)">🍃</span>
+<span class="boho-leaf" style="bottom:10%;left:3%;transform:rotate(10deg)">🌾</span>
+<span class="boho-leaf" style="bottom:30%;right:2%;transform:rotate(-25deg)">🌿</span>
 
-  <form id="form" class="space-y-6">
-    <div>
-      <label for="nome" class="text-sm font-medium text-gray-700">Seu nome:</label>
-      <input type="text" id="nome" placeholder="Maria da Silva" class="mt-1 w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-rose-500 transition" required>
-    </div>
-    
-    <div>
-      <label class="text-sm font-medium text-gray-700">Escolha os itens: </label>
-      <div id="items" class="mt-2 grid grid-cols-2 gap-3"></div>
+<div class="container flex items-center justify-center min-h-screen p-4 py-10">
+  <div class="card w-full max-w-lg p-7 sm:p-10">
+
+    <!-- Header -->
+    <div class="text-center mb-2">
+      <div style="font-size:2.5rem; letter-spacing:4px; color:var(--sage); opacity:0.7; margin-bottom:6px">🌿 🍼 🌿</div>
+      <h1 class="text-4xl sm:text-5xl font-bold leading-tight">Chá de Fralda</h1>
+      <p class="subtitle text-lg mt-1">uma festa cheia de amor</p>
     </div>
 
-    <p id="erro" class="text-red-500 text-sm hidden font-semibold text-center"></p>
-    
-    <button type="submit" id="confirm" class="w-full bg-rose-700 text-white py-3 rounded-lg hover:bg-rose-800 transition-all duration-300 font-bold text-lg focus:outline-none focus:ring-4 focus:ring-rose-300">
-      Confirmar 💌
-    </button>
-  
-  </form>
+    <div class="boho-divider mt-4">
+      <span class="boho-icon">✦</span>
+    </div>
+
+    <p class="text-center text-sm mb-1" style="color:var(--brown); font-family:'Lato', sans-serif;">
+      Digite seu nome e escolha sua fralda 💛
+    </p>
+    <p class="text-center text-xs mb-6" style="color:#a0856a; font-family:'Playfair Display', serif; font-style:italic;">
+      Cada convidada contribui com um pacotinho de fraldas para a mamãe e o bebê!
+    </p>
+
+    <form id="form" class="space-y-5">
+      <div>
+        <label for="nome">Seu nome</label>
+        <input type="text" id="nome" placeholder="Ex: Maria da Silva" required>
+      </div>
+
+      <div>
+        <label>Escolha seu item 🌸</label>
+
+        <!-- RN -->
+        <div class="cat-label">
+          <span class="tag tag-rn">RN</span>
+          <span style="color:#aaa; font-size:0.8rem; font-style:normal; font-family:'Lato'">Recém-nascido · 5 vagas</span>
+        </div>
+        <div id="items-rn" class="grid grid-cols-1 gap-2 mb-2"></div>
+
+        <!-- P -->
+        <div class="cat-label">
+          <span class="tag tag-p">P</span>
+          <span style="color:#aaa; font-size:0.8rem; font-style:normal; font-family:'Lato'">Pequeno · 13 vagas</span>
+        </div>
+        <div id="items-p" class="grid grid-cols-1 gap-2 mb-2"></div>
+
+        <!-- M -->
+        <div class="cat-label">
+          <span class="tag tag-m">M</span>
+          <span style="color:#aaa; font-size:0.8rem; font-style:normal; font-family:'Lato'">Médio · 25 vagas</span>
+        </div>
+        <div id="items-m" class="grid grid-cols-1 gap-2 mb-2"></div>
+
+        <!-- G -->
+        <div class="cat-label">
+          <span class="tag tag-g">G</span>
+          <span style="color:#aaa; font-size:0.8rem; font-style:normal; font-family:'Lato'">Grande · 7 vagas</span>
+        </div>
+        <div id="items-g" class="grid grid-cols-1 gap-2 mb-2"></div>
+      </div>
+
+      <p id="erro" class="text-red-500 text-sm hidden font-semibold text-center" style="font-family:'Lato'"></p>
+
+      <button type="submit" id="confirm" class="submit-btn">
+        Confirmar Presença 🌿
+      </button>
+    </form>
+
+  </div>
 </div>
 
 <script>
-const itemsData = [
-  "15 canapés de frango",
-  "30 tortiletes",
-  "30 mini sanduíches naturais",
-  "30 empadinhas",
-  "50 coxinhas",
-  "50 bolinhas de carne",
-  "Docinhos variados",
-  "15 cookies",
-  "1x garrafa de vinho rosé (Chalise)",
-  "1 garrafa de vinho rosé (Chalise)",
-  "2L de suco de uva",
-  "2 garrafas de Coca-Cola Zero"
-];
+// Distribuição para 50 pessoas:
+// RN 10% = 5 vagas (fraldas RN)
+// P  25% = 13 vagas (fraldas P)  [12.5 arredondado p/ 13]
+// M  50% = 25 vagas (fraldas M)
+// G  15% = 7 vagas (fraldas G)   [7.5 arredondado p/ 7]
+// Total = 50
 
-let selectedItems = [];
+const itemsData = {
+  rn: Array.from({length: 5},  (_, i) => `🍼 Fralda RN — Vaga ${i+1}`),
+  p:  Array.from({length: 13}, (_, i) => `🧸 Fralda P — Vaga ${i+1}`),
+  m:  Array.from({length: 25}, (_, i) => `🌿 Fralda M — Vaga ${i+1}`),
+  g:  Array.from({length: 7},  (_, i) => `⭐ Fralda G — Vaga ${i+1}`),
+};
+
+let selectedItem = null;
 let itensOcupados = [];
-const form = document.getElementById("form");
-const confirmBtn = document.getElementById("confirm");
-const erro = document.getElementById("erro");
 
-function renderItems() {
-  const container = document.getElementById("items");
+const form   = document.getElementById("form");
+const confirmBtn = document.getElementById("confirm");
+const erro   = document.getElementById("erro");
+
+function renderCategory(containerId, items) {
+  const container = document.getElementById(containerId);
   container.innerHTML = "";
-  itemsData.forEach(item => {
+  items.forEach(item => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.textContent = item;
     const ocupado = itensOcupados.includes(item);
-    const selecionado = selectedItems.includes(item);
-    btn.className = `py-2 rounded-lg transition text-center text-sm font-medium ${
-      ocupado ? "bg-gray-300 text-gray-500 cursor-not-allowed line-through" : 
-      selecionado ? "bg-rose-700 text-white ring-2 ring-rose-400" : 
-      "bg-rose-50 text-rose-800 hover:bg-rose-100"
-    }`;
+    const selecionado = selectedItem === item;
+    btn.className = `item-btn ${ocupado ? "taken" : selecionado ? "selected" : "available"}`;
     btn.disabled = ocupado;
     btn.onclick = () => {
       if (ocupado) return;
-      if (selecionado) {
-        selectedItems = selectedItems.filter(i => i !== item);
-      } else {
-        selectedItems.push(item);
-      }
-      renderItems();
+      selectedItem = selecionado ? null : item;
+      renderAll();
     };
     container.appendChild(btn);
   });
 }
 
+function renderAll() {
+  renderCategory("items-rn", itemsData.rn);
+  renderCategory("items-p",  itemsData.p);
+  renderCategory("items-m",  itemsData.m);
+  renderCategory("items-g",  itemsData.g);
+}
+
 async function fetchItensOcupados() {
   try {
     const res = await fetch("/api/itens-escolhidos");
-    if (!res.ok) throw new Error("Falha ao buscar lista de itens.");
+    if (!res.ok) throw new Error();
     const data = await res.json();
     itensOcupados = data || [];
-    renderItems();
+    renderAll();
   } catch (err) {
-    console.error("Erro ao buscar itens ocupados:", err);
+    console.error("Erro ao buscar itens:", err);
     erro.textContent = "Não foi possível carregar a lista. Verifique se o servidor está rodando.";
     erro.classList.remove("hidden");
+    renderAll();
   }
 }
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const nome = document.getElementById("nome").value.trim();
-  if (!nome || selectedItems.length === 0) {
-    erro.textContent = "Preencha seu nome e escolha pelo menos um item!";
+  if (!nome || !selectedItem) {
+    erro.textContent = "Preencha seu nome e escolha um item!";
     erro.classList.remove("hidden");
     return;
   }
@@ -116,34 +430,34 @@ form.addEventListener("submit", async (e) => {
     const res = await fetch("/api/confirmar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nome, item: selectedItems })
+      body: JSON.stringify({ nome, item: [selectedItem] })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error);
 
-    // Alerta profissional usando SweetAlert2
     if (typeof Swal !== "undefined") {
       Swal.fire({
-        title: 'Confirmado!',
-        text: `Obrigado! você será redirecionado para o WhatsApp.`,
+        title: '🌿 Confirmado!',
+        html: `<p style="font-family:'Lato',sans-serif; color:#6b4226;">Obrigada, <b>${nome}</b>!<br>Você escolheu: <b>${selectedItem}</b><br><br>Você será redirecionada para o WhatsApp 💛</p>`,
         icon: 'success',
-        confirmButtonColor: '#e11d48',
-        confirmButtonText: 'Ir para o WhatsApp'
+        confirmButtonColor: '#c4714a',
+        confirmButtonText: 'Ir para o WhatsApp 🌿',
+        background: '#fdf8f0',
+        iconColor: '#8a9e7e',
       }).then(() => {
         const numeroWhats = "5582994041793";
-        const msg = `Oi! Ja fiz minha confirmação na despedida!`;
+        const msg = `Oi! Já fiz minha confirmação no Chá de Fralda! Escolhi: ${selectedItem} 🍼`;
         window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, "_blank");
       });
     } else {
-      alert(`Obrigado, ${nome}! Você selecionou: ${selectedItems.join(", ")}`);
+      alert(`Obrigada, ${nome}! Você escolheu: ${selectedItem}`);
       const numeroWhats = "5582994041793";
-      const msg = `Oi! Ja fiz minha confirmação na despedida!`;
+      const msg = `Oi! Já fiz minha confirmação no Chá de Fralda! Escolhi: ${selectedItem} 🍼`;
       window.open(`https://wa.me/${numeroWhats}?text=${encodeURIComponent(msg)}`, "_blank");
     }
 
-    // Reset
     document.getElementById("nome").value = "";
-    selectedItems = [];
+    selectedItem = null;
     fetchItensOcupados();
   } catch (err) {
     erro.textContent = err.message || "Erro ao enviar. Tente novamente!";
@@ -151,14 +465,13 @@ form.addEventListener("submit", async (e) => {
     console.error(err);
   } finally {
     confirmBtn.disabled = false;
-    confirmBtn.textContent = "Confirmar 💌";
+    confirmBtn.textContent = "Confirmar Presença 🌿";
   }
 });
 
 fetchItensOcupados();
 </script>
 
-<!-- Adicionar SweetAlert2 para alertas profissionais -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
