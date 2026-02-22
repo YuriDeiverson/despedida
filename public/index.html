@@ -11,6 +11,8 @@
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Lato:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
+
+    /* ÍCONE FAVICON */
     <style>
       :root {
         --cream: #f7efe2;
@@ -1328,17 +1330,26 @@
       let hasInteracted = false;
 
       // Debug: Verificar se o áudio foi carregado
-      audio.addEventListener('loadstart', () => console.log('🎵 Carregando áudio...'));
-      audio.addEventListener('canplay', () => console.log('🎵 Áudio pronto para tocar!'));
-      audio.addEventListener('error', (e) => console.error('❌ Erro no áudio:', e, audio.error));
+      audio.addEventListener("loadstart", () =>
+        console.log("🎵 Carregando áudio..."),
+      );
+      audio.addEventListener("canplay", () =>
+        console.log("🎵 Áudio pronto para tocar!"),
+      );
+      audio.addEventListener("error", (e) =>
+        console.error("❌ Erro no áudio:", e, audio.error),
+      );
 
       function startMusic(event) {
-        console.log('🎵 Tentando iniciar música...', { isPlaying, hasInteracted });
+        console.log("🎵 Tentando iniciar música...", {
+          isPlaying,
+          hasInteracted,
+        });
         if (!isPlaying && !hasInteracted) {
           audio.muted = false;
           audio.volume = 0.2;
           const playPromise = audio.play();
-          console.log('🎵 Play promise:', playPromise);
+          console.log("🎵 Play promise:", playPromise);
           if (playPromise !== undefined) {
             playPromise
               .then(() => {
@@ -1346,7 +1357,7 @@
                 isPlaying = true;
                 hasInteracted = true;
                 removeAllListeners();
-                console.log('🎵 Música iniciada com sucesso!');
+                console.log("🎵 Música iniciada com sucesso!");
               })
               .catch((error) => {
                 console.error("❌ Erro ao reproduzir áudio:", error);
@@ -1372,25 +1383,25 @@
 
       musicBtn.addEventListener("click", (e) => {
         e.stopPropagation();
-        console.log('🎵 Botão clicado!', { isPlaying, audioSrc: audio.src });
-        
+        console.log("🎵 Botão clicado!", { isPlaying, audioSrc: audio.src });
+
         if (isPlaying) {
-          console.log('🎵 Pausando música...');
+          console.log("🎵 Pausando música...");
           audio.pause();
           musicBtn.textContent = "🎵";
           isPlaying = false;
         } else {
-          console.log('🎵 Iniciando música manualmente...');
+          console.log("🎵 Iniciando música manualmente...");
           audio.muted = false;
           audio.volume = 0.2;
           const playPromise = audio.play();
-          console.log('🎵 Play promise (manual):', playPromise);
+          console.log("🎵 Play promise (manual):", playPromise);
           if (playPromise !== undefined) {
             playPromise
               .then(() => {
                 musicBtn.textContent = "🔊";
                 isPlaying = true;
-                console.log('🎵 Música manual iniciada com sucesso!');
+                console.log("🎵 Música manual iniciada com sucesso!");
               })
               .catch((error) => {
                 console.error("❌ Erro ao reproduzir áudio (manual):", error);
