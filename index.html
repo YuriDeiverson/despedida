@@ -1170,9 +1170,8 @@
           };
           const nw = "5582987317923",
             msg =
-              "Oi! Já fiz minha confirmação no Chá de Fralda do Dante! Escolhi: " +
-              tipoFralda[selectedLabel] +
-              " 🍼";
+              "Oi! Já fiz minha confirmação no Chá de Fralda do Dante!%0AEscolhi: " +
+              tipoFralda[selectedLabel];
           if (typeof Swal !== "undefined") {
             Swal.fire({
               title: "🍼 Confirmado!",
@@ -1181,7 +1180,7 @@
                 nome +
                 "</b>!<br>Você escolheu: <b>" +
                 selectedLabel +
-                "</b><br><br>Você será redirecionada para o WhatsApp 💛</p>",
+                "</b><br><br>Você será redirecionado(a) para o WhatsApp 💛</p>",
               icon: "success",
               confirmButtonColor: "#c4714a",
               confirmButtonText: "Ir para o WhatsApp 🌿",
@@ -1189,14 +1188,14 @@
               iconColor: "#7d9b76",
             }).then(() =>
               window.open(
-                "https://wa.me/" + nw + "?text=" + encodeURIComponent(msg),
+                "https://wa.me/" + nw + "?text=" + msg,
                 "_blank",
               ),
             );
           } else {
             alert("Obrigada, " + nome + "!");
             window.open(
-              "https://wa.me/" + nw + "?text=" + encodeURIComponent(msg),
+              "https://wa.me/" + nw + "?text=" + msg,
               "_blank",
             );
           }
