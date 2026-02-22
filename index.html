@@ -2,7 +2,10 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>Chá de Fralda do Dante</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Lato:wght@300;400;700&display=swap"
@@ -29,11 +32,15 @@
         margin: 0;
         padding: 0;
       }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
       body {
         font-family: "Lato", sans-serif;
         background: var(--cream);
-        height: 100vh;
-        overflow: hidden;
+        overflow-x: hidden;
       }
 
       /* ── SKY BACKGROUND ── */
@@ -56,12 +63,11 @@
       /* ── BACKGROUND SUN IMAGE ── */
       .sun-background {
         position: fixed;
-        top: -70px;
+        top: -50px;
         left: 50%;
         transform: translateX(-50%);
         width: 350px;
         height: 350px;
-
         pointer-events: none;
         background-image: url("sol-fundo.png");
         background-size: contain;
@@ -69,6 +75,7 @@
         background-position: center;
         opacity: 0.75;
         filter: brightness(1.3) saturate(1.4) hue-rotate(-20deg);
+        z-index: 1;
       }
 
       .sun-background::before {
@@ -96,7 +103,6 @@
         position: absolute;
         pointer-events: none;
       }
-      /* Cloud shape via multiple box-shadows / border-radius */
       .cld-shape {
         background: white;
         border-radius: 50px;
@@ -259,82 +265,6 @@
         }
       }
 
-      @media (max-width: 768px) {
-        .page {
-          padding: 70px 15px 30px;
-          height: 100vh;
-          overflow: hidden;
-        }
-
-        /* Redistribuir nuvens no mobile - evitar aglomeração acima do sol */
-        .cl1 {
-          top: 10%;
-        }
-        .cl2 {
-          top: 28%;
-        }
-        .cl3 {
-          top: 45%;
-        }
-        .cl7 {
-          top: 35%;
-        }
-        .cl8 {
-          top: 55%;
-        }
-
-        .cloud-big .cld-shape {
-          width: 150px;
-          height: 48px;
-        }
-        .cloud-big .cld-shape::before {
-          width: 75px;
-          height: 62px;
-          top: -30px;
-          left: 20px;
-        }
-        .cloud-big .cld-shape::after {
-          width: 55px;
-          height: 48px;
-          top: -22px;
-          left: 75px;
-        }
-
-        .cloud-med .cld-shape {
-          width: 100px;
-          height: 35px;
-        }
-        .cloud-med .cld-shape::before {
-          width: 55px;
-          height: 48px;
-          top: -22px;
-          left: 12px;
-        }
-        .cloud-med .cld-shape::after {
-          width: 40px;
-          height: 35px;
-          top: -16px;
-          left: 52px;
-        }
-
-        .cloud-sm .cld-shape {
-          width: 70px;
-          height: 26px;
-        }
-        .cloud-sm .cld-shape::before {
-          width: 38px;
-          height: 34px;
-          top: -15px;
-          left: 8px;
-        }
-        .cloud-sm .cld-shape::after {
-          width: 28px;
-          height: 26px;
-          top: -11px;
-          left: 36px;
-        }
-      }
-
       /* ── FLOATING PARTICLES ── */
       .particles {
         position: fixed;
@@ -367,15 +297,18 @@
 
       /* ── PAGES ── */
       .page {
-        position: relative;
-        z-index: 10;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
         height: 100vh;
         display: none;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 160px 20px 40px;
-        overflow: hidden;
+        padding: 20px;
+        overflow-y: auto;
+        z-index: 10;
       }
       .page.active {
         display: flex;
@@ -399,16 +332,18 @@
         overflow: hidden;
       }
       .invite-card {
-        max-width: 400px;
-        padding: 24px 28px 28px;
+        max-width: 420px;
+        padding: 40px 30px 35px;
         text-align: center;
+        margin: auto;
       }
       .rsvp-card {
-        max-width: 480px;
-        padding: 24px 24px 20px;
-        max-height: 85vh;
+        max-width: 500px;
+        padding: 30px;
+        max-height: 90vh;
         overflow-y: auto;
         overflow-x: hidden;
+        margin: auto;
       }
       .invite-card::before,
       .rsvp-card::before {
@@ -429,64 +364,49 @@
         );
       }
 
-      .corner-deco {
-        position: absolute;
-        width: 72px;
-        opacity: 0.14;
-      }
-      .corner-deco.tl {
-        top: 14px;
-        left: 14px;
-      }
-      .corner-deco.br {
-        bottom: 14px;
-        right: 14px;
-        transform: rotate(180deg);
-      }
-
       /* ── INVITE TEXT ── */
       .invite-pretitle {
         font-family: "Cormorant Garamond", serif;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         font-style: italic;
         color: var(--sage);
         letter-spacing: 2.5px;
         text-transform: uppercase;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         margin-top: 10px;
       }
       .invite-title {
         font-family: "Playfair Display", serif;
-        font-size: 1.55rem;
+        font-size: 1.8rem;
         font-weight: 700;
         color: var(--brown);
         line-height: 1.2;
-        margin-bottom: 2px;
+        margin-bottom: 5px;
       }
       .invite-name {
         font-family: "Playfair Display", serif;
-        font-size: 3.4rem;
+        font-size: 3.8rem;
         font-weight: 600;
         font-style: italic;
         color: var(--gold);
         line-height: 1.05;
-        margin-bottom: 8px;
+        margin-bottom: 12px;
         text-shadow: 0 2px 12px rgba(200, 146, 42, 0.25);
         letter-spacing: -0.5px;
       }
       .invite-msg {
         font-family: "Cormorant Garamond", serif;
-        font-size: 1.05rem;
+        font-size: 1.15rem;
         font-style: italic;
         color: var(--brown-light);
         line-height: 1.65;
-        margin-bottom: 4px;
+        margin-bottom: 8px;
       }
       .boho-divider {
         display: flex;
         align-items: center;
         gap: 10px;
-        margin: 13px auto;
+        margin: 15px auto;
       }
       .boho-divider::before,
       .boho-divider::after {
@@ -502,22 +422,23 @@
       }
       .boho-divider span {
         color: var(--gold);
-        font-size: 0.85rem;
+        font-size: 0.9rem;
       }
 
       /* ── ACTION BUTTONS ── */
       .action-btns {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-top: 8px;
+        gap: 16px;
+        margin-top: 12px;
+        width: 100%;
       }
       .action-btn {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 9px;
-        padding: 20px 14px;
+        gap: 10px;
+        padding: 22px 16px;
         border-radius: 20px;
         border: none;
         cursor: pointer;
@@ -559,26 +480,26 @@
         box-shadow: 0 8px 28px rgba(125, 155, 118, 0.52);
       }
       .action-icon {
-        width: 54px;
-        height: 54px;
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
         background: rgba(255, 255, 255, 0.24);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.8rem;
+        font-size: 1.9rem;
         backdrop-filter: blur(4px);
       }
       .action-label {
         font-family: "Playfair Display", serif;
-        font-size: 0.98rem;
+        font-size: 1.05rem;
         font-weight: 700;
         color: white;
         letter-spacing: 0.2px;
       }
       .action-sublabel {
         font-family: "Lato", sans-serif;
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         color: rgba(255, 255, 255, 0.82);
       }
 
@@ -594,12 +515,13 @@
         background: rgba(200, 146, 42, 0.1);
         border: 1px solid rgba(200, 146, 42, 0.2);
         border-radius: 20px;
-        padding: 6px 14px;
+        padding: 8px 16px;
         cursor: pointer;
-        margin-bottom: 20px;
+        margin-bottom: 22px;
         transition: all 0.2s;
         text-transform: uppercase;
         letter-spacing: 0.3px;
+        align-self: flex-start;
       }
       .back-btn:hover {
         background: rgba(200, 146, 42, 0.18);
@@ -607,36 +529,36 @@
       }
       .rsvp-title {
         font-family: "Playfair Display", serif;
-        font-size: 1.5rem;
+        font-size: 1.7rem;
         font-weight: 700;
         color: var(--brown);
-        margin-bottom: 2px;
+        margin-bottom: 5px;
       }
       .rsvp-subtitle {
         font-family: "Cormorant Garamond", serif;
         font-style: italic;
         color: var(--terracotta);
-        font-size: 1rem;
-        margin-bottom: 14px;
+        font-size: 1.05rem;
+        margin-bottom: 16px;
       }
       .form-label {
         display: block;
         font-family: "Lato", sans-serif;
-        font-size: 0.74rem;
+        font-size: 0.75rem;
         font-weight: 700;
         letter-spacing: 0.8px;
         text-transform: uppercase;
         color: var(--brown);
-        margin-bottom: 6px;
+        margin-bottom: 8px;
       }
       input[type="text"] {
         background: rgba(237, 223, 200, 0.38);
         border: 1.5px solid rgba(200, 146, 42, 0.28);
         border-radius: 10px;
-        padding: 12px 14px;
+        padding: 14px 16px;
         width: 100%;
         font-family: "Lato", sans-serif;
-        font-size: 0.95rem;
+        font-size: 0.98rem;
         color: var(--dark);
         transition:
           border-color 0.2s,
@@ -656,6 +578,7 @@
         overflow: hidden;
         background: rgba(247, 239, 226, 0.48);
         transition: box-shadow 0.2s;
+        margin-bottom: 10px;
       }
       .cat-block:hover {
         box-shadow: 0 2px 12px rgba(200, 146, 42, 0.1);
@@ -665,7 +588,7 @@
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        padding: 11px 14px;
+        padding: 13px 16px;
         background: transparent;
         border: none;
         cursor: pointer;
@@ -677,22 +600,23 @@
       .cat-toggle-left {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
       }
       .cat-name {
         font-family: "Lato", sans-serif;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         font-weight: 700;
         color: var(--brown);
       }
       .cat-count {
         font-family: "Cormorant Garamond", serif;
-        font-size: 0.82rem;
+        font-size: 0.85rem;
         font-style: italic;
         color: #a08060;
+        margin-left: 4px;
       }
       .cat-arrow {
-        font-size: 0.68rem;
+        font-size: 0.7rem;
         color: var(--gold);
         transition: transform 0.3s ease;
       }
@@ -706,27 +630,22 @@
         transition:
           max-height 0.4s ease,
           opacity 0.3s ease;
-        padding: 0 12px;
+        padding: 0 14px;
       }
       .cat-panel.open {
         max-height: 600px;
         opacity: 1;
-        padding: 4px 12px 10px;
+        padding: 6px 14px 12px;
       }
       .tag {
         display: inline-flex;
         align-items: center;
-        padding: 2px 10px;
+        padding: 3px 11px;
         border-radius: 20px;
         font-size: 0.68rem;
         font-weight: 700;
         letter-spacing: 0.5px;
         text-transform: uppercase;
-      }
-      .tag-rn {
-        background: rgba(184, 134, 11, 0.13);
-        color: #9a7010;
-        border: 1px solid rgba(184, 134, 11, 0.28);
       }
       .tag-p {
         background: rgba(201, 139, 133, 0.13);
@@ -746,14 +665,15 @@
       .items-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 6px;
+        gap: 8px;
+        margin-bottom: 4px;
       }
       .item-btn {
-        padding: 8px 5px;
-        border-radius: 9px;
+        padding: 10px 6px;
+        border-radius: 10px;
         border: 1.5px solid transparent;
         font-family: "Lato", sans-serif;
-        font-size: 0.75rem;
+        font-size: 0.78rem;
         font-weight: 600;
         text-align: center;
         cursor: pointer;
@@ -795,13 +715,13 @@
         color: #c0b0a0;
         cursor: not-allowed;
         text-decoration: line-through;
-        font-size: 0.7rem;
+        font-size: 0.72rem;
       }
       .selected-preview {
         display: none;
         align-items: center;
-        gap: 8px;
-        padding: 10px 14px;
+        gap: 10px;
+        padding: 12px 16px;
         background: linear-gradient(
           135deg,
           rgba(200, 146, 42, 0.09),
@@ -809,10 +729,10 @@
         );
         border: 1.5px dashed rgba(200, 146, 42, 0.36);
         border-radius: 10px;
-        font-size: 0.85rem;
+        font-size: 0.88rem;
         color: var(--brown);
         font-family: "Lato", sans-serif;
-        margin-bottom: 10px;
+        margin-bottom: 14px;
       }
       .preview-item {
         font-weight: 700;
@@ -826,7 +746,7 @@
         background: none;
         border: none;
         cursor: pointer;
-        padding: 2px 6px;
+        padding: 4px 8px;
         border-radius: 4px;
         transition: background 0.2s;
       }
@@ -835,7 +755,7 @@
       }
       .submit-btn {
         width: 100%;
-        padding: 14px;
+        padding: 16px;
         background: linear-gradient(
           135deg,
           var(--terracotta),
@@ -845,12 +765,13 @@
         border: none;
         border-radius: 12px;
         font-family: "Playfair Display", serif;
-        font-size: 1.05rem;
+        font-size: 1.1rem;
         font-weight: 700;
         cursor: pointer;
         transition: all 0.3s ease;
         box-shadow: 0 4px 18px rgba(196, 113, 74, 0.35);
         letter-spacing: 0.5px;
+        margin-top: 8px;
       }
       .submit-btn:hover {
         transform: translateY(-2px);
@@ -878,13 +799,331 @@
       .rsvp-card {
         animation: fadeUp 0.5s ease both;
       }
+
+      /* ──────────────────────────────── */
+      /* RESPONSIVIDADE MOBILE            */
+      /* ──────────────────────────────── */
+      @media (max-width: 600px) {
+        .page {
+          padding: 15px;
+          padding-top: clamp(100px, 30vh, 150px);
+          padding-bottom: 20px;
+        }
+
+        /* ── SOL PARA MOBILE ── */
+        .sun-background {
+          top: 50px;
+          width: 200px;
+          height: 200px;
+        }
+
+        .sun-background::before {
+          inset: -80px;
+        }
+
+        /* ── CLOUDSS MOBILE ── */
+        .cloud-big .cld-shape {
+          width: 130px;
+          height: 42px;
+        }
+        .cloud-big .cld-shape::before {
+          width: 65px;
+          height: 55px;
+          top: -26px;
+          left: 18px;
+        }
+        .cloud-big .cld-shape::after {
+          width: 48px;
+          height: 42px;
+          top: -16px;
+          left: 65px;
+        }
+
+        .cloud-med .cld-shape {
+          width: 90px;
+          height: 30px;
+        }
+        .cloud-med .cld-shape::before {
+          width: 48px;
+          height: 40px;
+          top: -18px;
+          left: 10px;
+        }
+        .cloud-med .cld-shape::after {
+          width: 35px;
+          height: 30px;
+          top: -14px;
+          left: 45px;
+        }
+
+        .cloud-sm .cld-shape {
+          width: 65px;
+          height: 24px;
+        }
+        .cloud-sm .cld-shape::before {
+          width: 33px;
+          height: 32px;
+          top: -14px;
+          left: 7px;
+        }
+        .cloud-sm .cld-shape::after {
+          width: 25px;
+          height: 24px;
+          top: -10px;
+          left: 32px;
+        }
+
+        .cl1 {
+          top: 12%;
+        }
+        .cl2 {
+          top: 35%;
+        }
+        .cl3 {
+          top: 52%;
+        }
+        .cl4 {
+          top: 70%;
+        }
+        .cl7 {
+          top: 25%;
+        }
+        .cl8 {
+          top: 55%;
+        }
+
+        /* ── CARD MOBILE ── */
+        .invite-card {
+          max-width: 100%;
+          padding: 30px 20px 28px;
+        }
+
+        .invite-pretitle {
+          font-size: 0.85rem;
+          margin-bottom: 8px;
+        }
+        .invite-title {
+          font-size: 1.4rem;
+          margin-bottom: 3px;
+        }
+        .invite-name {
+          font-size: 2.6rem;
+          margin-bottom: 8px;
+        }
+        .invite-msg {
+          font-size: 0.95rem;
+          margin-bottom: 3px;
+        }
+
+        .boho-divider {
+          margin: 10px auto;
+        }
+        .boho-divider span {
+          font-size: 0.75rem;
+        }
+
+        .action-btns {
+          gap: 12px;
+          margin-top: 10px;
+        }
+        .action-btn {
+          padding: 16px 12px;
+          gap: 8px;
+          border-radius: 16px;
+        }
+        .action-icon {
+          width: 48px;
+          height: 48px;
+          font-size: 1.6rem;
+        }
+        .action-label {
+          font-size: 0.9rem;
+        }
+        .action-sublabel {
+          font-size: 0.65rem;
+        }
+
+        /* ── RSVP MOBILE ── */
+        .rsvp-card {
+          max-width: 100%;
+          padding: 24px 18px;
+          max-height: 85vh;
+        }
+
+        .back-btn {
+          font-size: 0.7rem;
+          padding: 6px 12px;
+          margin-bottom: 18px;
+        }
+
+        .rsvp-title {
+          font-size: 1.4rem;
+          margin-bottom: 4px;
+        }
+        .rsvp-subtitle {
+          font-size: 0.95rem;
+          margin-bottom: 12px;
+        }
+
+        .form-label {
+          font-size: 0.7rem;
+          margin-bottom: 6px;
+        }
+        input[type="text"] {
+          padding: 12px 14px;
+          font-size: 0.9rem;
+          margin-bottom: 12px;
+        }
+
+        .cat-toggle {
+          padding: 10px 12px;
+        }
+        .cat-name {
+          font-size: 0.8rem;
+        }
+        .cat-count {
+          font-size: 0.75rem;
+        }
+
+        .items-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 6px;
+        }
+        .item-btn {
+          padding: 8px 4px;
+          font-size: 0.7rem;
+        }
+
+        .selected-preview {
+          font-size: 0.8rem;
+          padding: 10px 12px;
+          margin-bottom: 12px;
+        }
+
+        .submit-btn {
+          padding: 14px;
+          font-size: 0.95rem;
+          margin-top: 6px;
+        }
+
+        #music-toggle {
+          bottom: 20px;
+          right: 20px;
+          width: 45px;
+          height: 45px;
+          font-size: 20px;
+        }
+      }
+
+      /* ──────────────────────────────── */
+      /* RESPONSIVIDADE TABLET            */
+      /* ──────────────────────────────── */
+      @media (min-width: 601px) and (max-width: 1024px) {
+        .page {
+          padding: 20px;
+          padding-top: clamp(120px, 20vh, 160px);
+        }
+
+        .sun-background {
+          top: -60px;
+          width: 300px;
+          height: 300px;
+        }
+
+        .invite-card {
+          max-width: 380px;
+          padding: 35px 28px;
+        }
+        .invite-name {
+          font-size: 3.2rem;
+        }
+
+        .rsvp-card {
+          max-width: 450px;
+          padding: 28px;
+        }
+
+        #music-toggle {
+          width: 48px;
+          height: 48px;
+          font-size: 22px;
+        }
+      }
+
+      /* ──────────────────────────────── */
+      /* RESPONSIVIDADE DESKTOP           */
+      /* ──────────────────────────────── */
+      @media (min-width: 1025px) {
+        .page {
+          padding-top: clamp(140px, 15vh, 180px);
+          padding-bottom: 40px;
+        }
+
+        .sun-background {
+          top: -80px;
+          width: 380px;
+          height: 380px;
+        }
+
+        .invite-card {
+          max-width: 460px;
+          padding: 48px 40px;
+        }
+        .invite-title {
+          font-size: 2rem;
+        }
+        .invite-name {
+          font-size: 4.2rem;
+        }
+        .invite-msg {
+          font-size: 1.2rem;
+        }
+
+        .action-btns {
+          gap: 18px;
+        }
+        .action-btn {
+          padding: 26px 18px;
+        }
+        .action-icon {
+          width: 62px;
+          height: 62px;
+          font-size: 2rem;
+        }
+
+        .rsvp-card {
+          max-width: 560px;
+          padding: 36px;
+        }
+        .rsvp-title {
+          font-size: 1.9rem;
+        }
+
+        #music-toggle {
+          width: 52px;
+          height: 52px;
+          font-size: 26px;
+        }
+      }
+
+      /* ──────────────────────────────── */
+      /* RESPONSIVIDADE NOTCHES (IPHONE)  */
+      /* ──────────────────────────────── */
+      @supports (padding: max(0px)) {
+        .page {
+          padding-top: max(20px, env(safe-area-inset-top));
+          padding-bottom: max(20px, env(safe-area-inset-bottom));
+          padding-left: max(20px, env(safe-area-inset-left));
+          padding-right: max(20px, env(safe-area-inset-right));
+        }
+      }
     </style>
   </head>
   <body>
     <!-- BACKGROUND MUSIC -->
     <audio id="bgAudio" muted loop style="display: none">
       <source
-        src="CHRISTINA PERRI - YOU ARE MY SUNSHINE [Lyric Video] - Warner Music Indonesia (720p, h264, youtube).mp3"
+        src="CHRISTINA PERRI - YOU ARE MY SUNSHINE [Lyric Video] - Warner Music Indonesia (youtube).mp3"
         type="audio/mp3"
       />
     </audio>
@@ -915,85 +1154,6 @@
     >
       🎵
     </button>
-
-    <script>
-      const audio = document.getElementById("bgAudio");
-      const musicBtn = document.getElementById("music-toggle");
-      let isPlaying = false;
-      let hasInteracted = false;
-
-      // Função para iniciar a música
-      function startMusic(event) {
-        if (!isPlaying && !hasInteracted) {
-          audio.muted = false;
-          audio.volume = 0.2;
-
-          const playPromise = audio.play();
-
-          if (playPromise !== undefined) {
-            playPromise
-              .then(() => {
-                musicBtn.textContent = "🔊";
-                isPlaying = true;
-                hasInteracted = true;
-                console.log("✅ Música iniciada com sucesso");
-                // Remove listeners após primeira interação bem-sucedida
-                removeAllListeners();
-              })
-              .catch((error) => {
-                console.error("❌ Erro ao reproduzir áudio:", error);
-              });
-          } else {
-            musicBtn.textContent = "🔊";
-            isPlaying = true;
-            hasInteracted = true;
-            removeAllListeners();
-          }
-        }
-      }
-
-      function removeAllListeners() {
-        document.removeEventListener("click", startMusic);
-        document.removeEventListener("touchstart", startMusic);
-        document.removeEventListener("pointerdown", startMusic);
-      }
-
-      // Detectar apenas interações válidas para autoplay (click, tap)
-      // Scroll (wheel/touchmove) não funciona com autoplay policy dos navegadores
-      document.addEventListener("click", startMusic, false);
-      document.addEventListener("touchstart", startMusic, false);
-      document.addEventListener("pointerdown", startMusic, false);
-
-      // Toggle manual do botão
-      musicBtn.addEventListener("click", (e) => {
-        e.stopPropagation(); // Evitar disparar startMusic
-        if (isPlaying) {
-          audio.pause();
-          musicBtn.textContent = "🎵";
-          isPlaying = false;
-        } else {
-          audio.muted = false;
-          audio.volume = 0.2;
-
-          const playPromise = audio.play();
-
-          if (playPromise !== undefined) {
-            playPromise
-              .then(() => {
-                musicBtn.textContent = "🔊";
-                isPlaying = true;
-                console.log("✅ Música iniciada manualmente");
-              })
-              .catch((error) => {
-                console.error("❌ Erro ao reproduzir áudio:", error);
-              });
-          } else {
-            musicBtn.textContent = "🔊";
-            isPlaying = true;
-          }
-        }
-      });
-    </script>
 
     <!-- SKY -->
     <div class="sky-bg"></div>
@@ -1054,7 +1214,7 @@
         <button class="back-btn" onclick="goToPage1()">
           ← Voltar ao convite
         </button>
-        <div style="text-align: center; margin-bottom: 16px">
+        <div style="text-align: center; margin-bottom: 18px">
           <h2 class="rsvp-title">Chá de Fralda</h2>
           <p class="rsvp-subtitle">Confirme sua presença</p>
           <div class="boho-divider" style="max-width: 200px; margin: 0 auto 0">
@@ -1064,7 +1224,7 @@
 
         <form
           id="form"
-          style="display: flex; flex-direction: column; gap: 16px"
+          style="display: flex; flex-direction: column; gap: 14px"
         >
           <div>
             <label class="form-label" for="nome">Seu nome</label>
@@ -1098,9 +1258,9 @@
                   onclick="toggleCat('p')"
                 >
                   <div class="cat-toggle-left">
-                    <span class="tag tag-p">P</span
-                    ><span class="cat-name">Tamanho Pequeno</span
-                    ><span class="cat-count" id="count-p">15</span>
+                    <span class="tag tag-p">P</span>
+                    <span class="cat-name">Tamanho Pequeno</span>
+                    <span class="cat-count" id="count-p">15</span>
                   </div>
                   <span class="cat-arrow" id="arrow-p">▼</span>
                 </button>
@@ -1115,9 +1275,9 @@
                   onclick="toggleCat('m')"
                 >
                   <div class="cat-toggle-left">
-                    <span class="tag tag-m">M</span
-                    ><span class="cat-name">Tamanho Médio</span
-                    ><span class="cat-count" id="count-m">28</span>
+                    <span class="tag tag-m">M</span>
+                    <span class="cat-name">Tamanho Médio</span>
+                    <span class="cat-count" id="count-m">28</span>
                   </div>
                   <span class="cat-arrow" id="arrow-m">▼</span>
                 </button>
@@ -1132,9 +1292,9 @@
                   onclick="toggleCat('g')"
                 >
                   <div class="cat-toggle-left">
-                    <span class="tag tag-g">G</span
-                    ><span class="cat-name">Tamanho Grande</span
-                    ><span class="cat-count" id="count-g">7</span>
+                    <span class="tag tag-g">G</span>
+                    <span class="cat-name">Tamanho Grande</span>
+                    <span class="cat-count" id="count-g">7</span>
                   </div>
                   <span class="cat-arrow" id="arrow-g">▼</span>
                 </button>
@@ -1149,7 +1309,7 @@
             style="
               display: none;
               color: #c0392b;
-              font-size: 0.85rem;
+              font-size: 0.88rem;
               font-weight: 700;
               text-align: center;
             "
@@ -1162,6 +1322,91 @@
     </div>
 
     <script>
+      const audio = document.getElementById("bgAudio");
+      const musicBtn = document.getElementById("music-toggle");
+      let isPlaying = false;
+      let hasInteracted = false;
+
+      function startMusic(event) {
+        if (!isPlaying && !hasInteracted) {
+          audio.muted = false;
+          audio.volume = 0.2;
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                musicBtn.textContent = "🔊";
+                isPlaying = true;
+                hasInteracted = true;
+                removeAllListeners();
+              })
+              .catch((error) => {
+                console.error("❌ Erro ao reproduzir áudio:", error);
+              });
+          } else {
+            musicBtn.textContent = "🔊";
+            isPlaying = true;
+            hasInteracted = true;
+            removeAllListeners();
+          }
+        }
+      }
+
+      function removeAllListeners() {
+        document.removeEventListener("click", startMusic);
+        document.removeEventListener("touchstart", startMusic);
+        document.removeEventListener("pointerdown", startMusic);
+      }
+
+      document.addEventListener("click", startMusic, false);
+      document.addEventListener("touchstart", startMusic, false);
+      document.addEventListener("pointerdown", startMusic, false);
+
+      musicBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (isPlaying) {
+          audio.pause();
+          musicBtn.textContent = "🎵";
+          isPlaying = false;
+        } else {
+          audio.muted = false;
+          audio.volume = 0.2;
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                musicBtn.textContent = "🔊";
+                isPlaying = true;
+              })
+              .catch((error) => {
+                console.error("❌ Erro ao reproduzir áudio:", error);
+              });
+          } else {
+            musicBtn.textContent = "🔊";
+            isPlaying = true;
+          }
+        }
+      });
+
+      // Floating particles
+      (function () {
+        const container = document.getElementById("particles");
+        const colors = [
+          "rgba(200,146,42,.4)",
+          "rgba(201,139,133,.4)",
+          "rgba(125,155,118,.4)",
+          "rgba(196,113,74,.3)",
+          "rgba(255,210,80,.4)",
+        ];
+        for (let i = 0; i < 22; i++) {
+          const p = document.createElement("div");
+          p.className = "particle";
+          const size = Math.random() * 6 + 3;
+          p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random() * 100}%;background:${colors[Math.floor(Math.random() * colors.length)]};animation-duration:${Math.random() * 14 + 10}s;animation-delay:${Math.random() * 12}s;`;
+          container.appendChild(p);
+        }
+      })();
+
       // Navigation
       function goToPage2() {
         document.getElementById("page1").classList.remove("active");
@@ -1199,25 +1444,6 @@
         }
       }
 
-      // Floating particles
-      (function () {
-        const container = document.getElementById("particles");
-        const colors = [
-          "rgba(200,146,42,.4)",
-          "rgba(201,139,133,.4)",
-          "rgba(125,155,118,.4)",
-          "rgba(196,113,74,.3)",
-          "rgba(255,210,80,.4)",
-        ];
-        for (let i = 0; i < 22; i++) {
-          const p = document.createElement("div");
-          p.className = "particle";
-          const size = Math.random() * 6 + 3;
-          p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random() * 100}%;background:${colors[Math.floor(Math.random() * colors.length)]};animation-duration:${Math.random() * 14 + 10}s;animation-delay:${Math.random() * 12}s;`;
-          container.appendChild(p);
-        }
-      })();
-
       // RSVP logic
       function makeItems(label, count) {
         return Array.from({ length: count }, (_, i) => ({
@@ -1237,6 +1463,7 @@
       const form = document.getElementById("form"),
         confirmBtn = document.getElementById("confirm-btn"),
         erroEl = document.getElementById("erro");
+
       function toggleCat(cat) {
         catState[cat] = !catState[cat];
         document
@@ -1246,6 +1473,7 @@
           .getElementById("arrow-" + cat)
           .classList.toggle("open", catState[cat]);
       }
+
       function updateCounts() {
         const t = { p: 15, m: 28, g: 7 };
         for (const [cat, total] of Object.entries(t)) {
@@ -1259,12 +1487,14 @@
           el.style.color = livres === 0 ? "#e57373" : "#a08060";
         }
       }
+
       function clearSelection() {
         selectedItem = null;
         selectedLabel = null;
         renderAll();
         updatePreview();
       }
+
       function updatePreview() {
         const preview = document.getElementById("selected-preview"),
           pt = document.getElementById("preview-text");
@@ -1282,6 +1512,7 @@
           preview.style.display = "none";
         }
       }
+
       function renderCategory(cat, items) {
         const c = document.getElementById("items-" + cat);
         if (!c) return;
@@ -1305,10 +1536,12 @@
           c.appendChild(btn);
         });
       }
+
       function renderAll() {
         ["p", "m", "g"].forEach((cat) => renderCategory(cat, itemsData[cat]));
         updateCounts();
       }
+
       async function fetchItensOcupados() {
         try {
           const res = await fetch("/api/itens-escolhidos");
@@ -1320,6 +1553,7 @@
           renderAll();
         }
       }
+
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const nome = document.getElementById("nome").value.trim();
@@ -1339,11 +1573,6 @@
           });
           const data = await res.json();
           if (!res.ok) throw new Error(data.error);
-          const tipoFralda = {
-            "Fralda P": "Tamanho Pequeno",
-            "Fralda M": "Tamanho Médio",
-            "Fralda G": "Tamanho Grande",
-          };
           const nw = "5582999377018",
             msg = "Oi! Já fiz minha confirmação no Chá de Fralda do Dante! ";
           if (typeof Swal !== "undefined") {
@@ -1357,7 +1586,7 @@
                 "</b><br><br>Você será redirecionado(a) para o WhatsApp 💛</p>",
               icon: "success",
               confirmButtonColor: "#c4714a",
-              confirmButtonText: "Ir para o WhatsApp ",
+              confirmButtonText: "Ir para o WhatsApp",
               background: "#fdf8f0",
               iconColor: "#7d9b76",
             }).then(() =>
@@ -1381,6 +1610,7 @@
           confirmBtn.textContent = "🍼 Confirmar Presença";
         }
       });
+
       fetchItensOcupados();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
