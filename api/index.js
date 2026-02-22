@@ -1,9 +1,13 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "..")));
 
 // A URL será pega das "Variáveis de Ambiente" da Vercel (mais seguro)
 const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL;
@@ -25,7 +29,9 @@ app.post("/api/confirmar", async (req, res) => {
   const { nome, item } = req.body;
 
   if (!nome || !item || !Array.isArray(item) || item.length === 0) {
-    return res.status(400).json({ error: "Nome e pelo menos um item são obrigatórios" });
+    return res
+      .status(400)
+      .json({ error: "Nome e pelo menos um item são obrigatórios" });
   }
 
   try {
@@ -34,7 +40,7 @@ app.post("/api/confirmar", async (req, res) => {
       const response = await fetch(APPS_SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome, item: i }) // envia 1 por vez
+        body: JSON.stringify({ nome, item: i }), // envia 1 por vez
       });
       const data = await response.json();
       if (data.status === "erro") {
@@ -44,7 +50,9 @@ app.post("/api/confirmar", async (req, res) => {
 
     res.json({ success: true, message: "Confirmação enviada!" });
   } catch (err) {
-    res.status(500).json({ error: "Erro interno ao se comunicar com a planilha." });
+    res
+      .status(500)
+      .json({ error: "Erro interno ao se comunicar com a planilha." });
   }
 });
 
