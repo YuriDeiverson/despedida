@@ -32,8 +32,8 @@
       body {
         font-family: "Lato", sans-serif;
         background: var(--cream);
-        min-height: 100vh;
-        overflow-x: hidden;
+        height: 100vh;
+        overflow: hidden;
       }
 
       /* ── SKY BACKGROUND ── */
@@ -261,7 +261,9 @@
 
       @media (max-width: 768px) {
         .page {
-          padding: 80px 20px 40px;
+          padding: 70px 15px 30px;
+          height: 100vh;
+          overflow: hidden;
         }
 
         /* Redistribuir nuvens no mobile - evitar aglomeração acima do sol */
@@ -882,8 +884,8 @@
     <!-- BACKGROUND MUSIC -->
     <audio id="bgAudio" muted loop style="display: none">
       <source
-        src="CHRISTINA PERRI - YOU ARE MY SUNSHINE [Lyric Video] - Warner Music Indonesia (720p, h264, youtube).mp4"
-        type="audio/mp4"
+        src="CHRISTINA PERRI - YOU ARE MY SUNSHINE [Lyric Video] - Warner Music Indonesia (720p, h264, youtube).mp3"
+        type="audio/mp3"
       />
     </audio>
 
@@ -925,9 +927,9 @@
         if (!isPlaying && !hasInteracted) {
           audio.muted = false;
           audio.volume = 0.2;
-          
+
           const playPromise = audio.play();
-          
+
           if (playPromise !== undefined) {
             playPromise
               .then(() => {
@@ -972,9 +974,9 @@
         } else {
           audio.muted = false;
           audio.volume = 0.2;
-          
+
           const playPromise = audio.play();
-          
+
           if (playPromise !== undefined) {
             playPromise
               .then(() => {
