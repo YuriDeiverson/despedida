@@ -38,6 +38,10 @@
         {
           "key": "Content-Type",
           "value": "audio/mpeg"
+        },
+        {
+          "key": "Accept-Ranges",
+          "value": "bytes"
         }
       ]
     }

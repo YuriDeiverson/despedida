@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "..")));
+app.use(express.static(path.join(__dirname, "..", "public")));
 
 // A URL será pega das "Variáveis de Ambiente" da Vercel (mais seguro)
 const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL;

@@ -1,0 +1,1618 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Chá de Fralda do Dante</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Lato:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --cream: #f7efe2;
+        --gold: #c8922a;
+        --gold-light: #e8b84b;
+        --terracotta: #c4714a;
+        --sage: #7d9b76;
+        --sage-light: #a8bf9e;
+        --dusty-rose: #c98b85;
+        --brown: #5c3d1e;
+        --brown-light: #7a5230;
+        --dark: #2e1f0e;
+        --sky-top: #d4eef7;
+        --sky-mid: #e8f4fb;
+        --sky-low: #f3f8fc;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      body {
+        font-family: "Lato", sans-serif;
+        background: var(--cream);
+        overflow-x: hidden;
+      }
+
+      /* ── SKY BACKGROUND ── */
+      .sky-bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background: linear-gradient(
+          180deg,
+          #b8d8ec 0%,
+          #cce5f3 18%,
+          #deeef7 35%,
+          #edf6fb 52%,
+          #f5f9f5 70%,
+          #f7f2ea 100%
+        );
+      }
+
+      /* ── BACKGROUND SUN IMAGE ── */
+      .sun-background {
+        position: fixed;
+        top: -50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 350px;
+        height: 350px;
+        pointer-events: none;
+        background-image: url("./sol-fundo.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0.75;
+        filter: brightness(1.3) saturate(1.4) hue-rotate(-20deg);
+        z-index: 1;
+      }
+
+      .sun-background::before {
+        content: "";
+        position: absolute;
+        inset: -120px;
+        background: repeating-conic-gradient(
+          from 0deg,
+          rgba(255, 200, 60, 0.19) 0deg 10deg,
+          transparent 10deg 20deg
+        );
+        border-radius: 50%;
+        pointer-events: none;
+      }
+
+      /* ── DRIFTING CLOUDS ── */
+      .clouds-layer {
+        position: fixed;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .cld {
+        position: absolute;
+        pointer-events: none;
+      }
+      .cld-shape {
+        background: white;
+        border-radius: 50px;
+        position: relative;
+        filter: drop-shadow(0 4px 12px rgba(180, 210, 240, 0.4));
+      }
+      .cld-shape::before,
+      .cld-shape::after {
+        content: "";
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+      }
+
+      /* Big fluffy clouds */
+      .cloud-big .cld-shape {
+        width: 220px;
+        height: 70px;
+      }
+      .cloud-big .cld-shape::before {
+        width: 110px;
+        height: 90px;
+        top: -42px;
+        left: 30px;
+      }
+      .cloud-big .cld-shape::after {
+        width: 80px;
+        height: 70px;
+        top: -32px;
+        left: 110px;
+      }
+
+      .cloud-med .cld-shape {
+        width: 150px;
+        height: 50px;
+      }
+      .cloud-med .cld-shape::before {
+        width: 80px;
+        height: 68px;
+        top: -32px;
+        left: 18px;
+      }
+      .cloud-med .cld-shape::after {
+        width: 58px;
+        height: 52px;
+        top: -24px;
+        left: 78px;
+      }
+
+      .cloud-sm .cld-shape {
+        width: 100px;
+        height: 36px;
+      }
+      .cloud-sm .cld-shape::before {
+        width: 54px;
+        height: 48px;
+        top: -22px;
+        left: 12px;
+      }
+      .cloud-sm .cld-shape::after {
+        width: 40px;
+        height: 36px;
+        top: -16px;
+        left: 52px;
+      }
+
+      /* Individual cloud instances */
+      .cl1 {
+        top: 8%;
+        left: -18%;
+        animation: cloudDrift1 60s linear infinite;
+        opacity: 0.92;
+      }
+      .cl2 {
+        top: 18%;
+        left: -14%;
+        animation: cloudDrift1 80s linear infinite;
+        opacity: 0.78;
+        animation-delay: -25s;
+      }
+      .cl3 {
+        top: 32%;
+        left: -20%;
+        animation: cloudDrift1 70s linear infinite;
+        opacity: 0.65;
+        animation-delay: -44s;
+      }
+      .cl4 {
+        top: 48%;
+        left: -16%;
+        animation: cloudDrift1 90s linear infinite;
+        opacity: 0.55;
+        animation-delay: -10s;
+      }
+      .cl5 {
+        top: 62%;
+        left: -12%;
+        animation: cloudDrift1 75s linear infinite;
+        opacity: 0.45;
+        animation-delay: -58s;
+      }
+      .cl6 {
+        top: 76%;
+        left: -22%;
+        animation: cloudDrift1 85s linear infinite;
+        opacity: 0.38;
+        animation-delay: -33s;
+      }
+
+      .cl7 {
+        top: 5%;
+        right: -18%;
+        animation: cloudDrift2 65s linear infinite;
+        opacity: 0.85;
+        animation-delay: -8s;
+      }
+      .cl8 {
+        top: 22%;
+        right: -14%;
+        animation: cloudDrift2 78s linear infinite;
+        opacity: 0.72;
+        animation-delay: -35s;
+      }
+      .cl9 {
+        top: 40%;
+        right: -20%;
+        animation: cloudDrift2 68s linear infinite;
+        opacity: 0.58;
+        animation-delay: -50s;
+      }
+      .cl10 {
+        top: 58%;
+        right: -16%;
+        animation: cloudDrift2 88s linear infinite;
+        opacity: 0.48;
+        animation-delay: -20s;
+      }
+      .cl11 {
+        top: 72%;
+        right: -12%;
+        animation: cloudDrift2 72s linear infinite;
+        opacity: 0.4;
+        animation-delay: -62s;
+      }
+
+      @keyframes cloudDrift1 {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(140vw);
+        }
+      }
+      @keyframes cloudDrift2 {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-140vw);
+        }
+      }
+
+      /* ── FLOATING PARTICLES ── */
+      .particles {
+        position: fixed;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+      }
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        animation: particleFloat linear infinite;
+        opacity: 0;
+      }
+      @keyframes particleFloat {
+        0% {
+          transform: translateY(100vh) scale(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.6;
+        }
+        90% {
+          opacity: 0.3;
+        }
+        100% {
+          transform: translateY(-20vh) scale(1.2);
+          opacity: 0;
+        }
+      }
+
+      /* ── PAGES ── */
+      .page {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        overflow-y: auto;
+        z-index: 10;
+      }
+      .page.active {
+        display: flex;
+      }
+
+      /* ── CARD ── */
+      .invite-card,
+      .rsvp-card {
+        background: rgba(255, 253, 248, 0.96);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1.5px solid rgba(200, 146, 42, 0.22);
+        border-radius: 28px;
+        box-shadow:
+          0 20px 60px rgba(94, 61, 30, 0.14),
+          0 8px 24px rgba(94, 61, 30, 0.08),
+          0 0 0 1px rgba(255, 255, 255, 0.7) inset,
+          0 2px 0 rgba(255, 255, 255, 0.9) inset;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+      .invite-card {
+        max-width: 420px;
+        padding: 40px 30px 35px;
+        text-align: center;
+        margin: auto;
+      }
+      .rsvp-card {
+        max-width: 500px;
+        padding: 30px;
+        max-height: 90vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin: auto;
+      }
+      .invite-card::before,
+      .rsvp-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(
+          90deg,
+          var(--sage),
+          var(--gold),
+          var(--terracotta),
+          var(--dusty-rose),
+          var(--gold-light),
+          var(--sage)
+        );
+      }
+
+      /* ── INVITE TEXT ── */
+      .invite-pretitle {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 0.95rem;
+        font-style: italic;
+        color: var(--sage);
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        margin-top: 10px;
+      }
+      .invite-title {
+        font-family: "Playfair Display", serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--brown);
+        line-height: 1.2;
+        margin-bottom: 5px;
+      }
+      .invite-name {
+        font-family: "Playfair Display", serif;
+        font-size: 3.8rem;
+        font-weight: 600;
+        font-style: italic;
+        color: var(--gold);
+        line-height: 1.05;
+        margin-bottom: 12px;
+        text-shadow: 0 2px 12px rgba(200, 146, 42, 0.25);
+        letter-spacing: -0.5px;
+      }
+      .invite-msg {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 1.15rem;
+        font-style: italic;
+        color: var(--brown-light);
+        line-height: 1.65;
+        margin-bottom: 8px;
+      }
+      .boho-divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 15px auto;
+      }
+      .boho-divider::before,
+      .boho-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(200, 146, 42, 0.42),
+          transparent
+        );
+      }
+      .boho-divider span {
+        color: var(--gold);
+        font-size: 0.9rem;
+      }
+
+      /* ── ACTION BUTTONS ── */
+      .action-btns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 12px;
+        width: 100%;
+      }
+      .action-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 22px 16px;
+        border-radius: 20px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+      }
+      .action-btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: 20px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        background: rgba(255, 255, 255, 0.14);
+      }
+      .action-btn:hover::after {
+        opacity: 1;
+      }
+      .action-btn:hover {
+        transform: translateY(-3px);
+      }
+      .action-btn:active {
+        transform: translateY(0);
+      }
+      .action-btn.confirmar {
+        background: linear-gradient(145deg, var(--terracotta), #d4907a);
+        box-shadow: 0 5px 20px rgba(196, 113, 74, 0.38);
+      }
+      .action-btn.confirmar:hover {
+        box-shadow: 0 8px 28px rgba(196, 113, 74, 0.52);
+      }
+      .action-btn.localizacao {
+        background: linear-gradient(145deg, var(--sage), var(--sage-light));
+        box-shadow: 0 5px 20px rgba(125, 155, 118, 0.38);
+      }
+      .action-btn.localizacao:hover {
+        box-shadow: 0 8px 28px rgba(125, 155, 118, 0.52);
+      }
+      .action-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.24);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.9rem;
+        backdrop-filter: blur(4px);
+      }
+      .action-label {
+        font-family: "Playfair Display", serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 0.2px;
+      }
+      .action-sublabel {
+        font-family: "Lato", sans-serif;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.82);
+      }
+
+      /* ── RSVP ── */
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Lato", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--brown-light);
+        background: rgba(200, 146, 42, 0.1);
+        border: 1px solid rgba(200, 146, 42, 0.2);
+        border-radius: 20px;
+        padding: 8px 16px;
+        cursor: pointer;
+        margin-bottom: 22px;
+        transition: all 0.2s;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        align-self: flex-start;
+      }
+      .back-btn:hover {
+        background: rgba(200, 146, 42, 0.18);
+        transform: translateX(-2px);
+      }
+      .rsvp-title {
+        font-family: "Playfair Display", serif;
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: var(--brown);
+        margin-bottom: 5px;
+      }
+      .rsvp-subtitle {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        color: var(--terracotta);
+        font-size: 1.05rem;
+        margin-bottom: 16px;
+      }
+      .form-label {
+        display: block;
+        font-family: "Lato", sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--brown);
+        margin-bottom: 8px;
+      }
+      input[type="text"] {
+        background: rgba(237, 223, 200, 0.38);
+        border: 1.5px solid rgba(200, 146, 42, 0.28);
+        border-radius: 10px;
+        padding: 14px 16px;
+        width: 100%;
+        font-family: "Lato", sans-serif;
+        font-size: 0.98rem;
+        color: var(--dark);
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        outline: none;
+      }
+      input[type="text"]:focus {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 3px rgba(200, 146, 42, 0.12);
+      }
+      input[type="text"]::placeholder {
+        color: #c0a882;
+      }
+      .cat-block {
+        border: 1.5px solid rgba(200, 146, 42, 0.18);
+        border-radius: 12px;
+        overflow: hidden;
+        background: rgba(247, 239, 226, 0.48);
+        transition: box-shadow 0.2s;
+        margin-bottom: 10px;
+      }
+      .cat-block:hover {
+        box-shadow: 0 2px 12px rgba(200, 146, 42, 0.1);
+      }
+      .cat-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 13px 16px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .cat-toggle:hover {
+        background: rgba(200, 146, 42, 0.06);
+      }
+      .cat-toggle-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .cat-name {
+        font-family: "Lato", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--brown);
+      }
+      .cat-count {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 0.85rem;
+        font-style: italic;
+        color: #a08060;
+        margin-left: 4px;
+      }
+      .cat-arrow {
+        font-size: 0.7rem;
+        color: var(--gold);
+        transition: transform 0.3s ease;
+      }
+      .cat-arrow.open {
+        transform: rotate(180deg);
+      }
+      .cat-panel {
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        transition:
+          max-height 0.4s ease,
+          opacity 0.3s ease;
+        padding: 0 14px;
+      }
+      .cat-panel.open {
+        max-height: 600px;
+        opacity: 1;
+        padding: 6px 14px 12px;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 11px;
+        border-radius: 20px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+      .tag-p {
+        background: rgba(201, 139, 133, 0.13);
+        color: #a05a55;
+        border: 1px solid rgba(201, 139, 133, 0.28);
+      }
+      .tag-m {
+        background: rgba(125, 155, 118, 0.13);
+        color: #4a7a43;
+        border: 1px solid rgba(125, 155, 118, 0.28);
+      }
+      .tag-g {
+        background: rgba(196, 113, 74, 0.13);
+        color: #8b4020;
+        border: 1px solid rgba(196, 113, 74, 0.28);
+      }
+      .items-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 4px;
+      }
+      .item-btn {
+        padding: 10px 6px;
+        border-radius: 10px;
+        border: 1.5px solid transparent;
+        font-family: "Lato", sans-serif;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        line-height: 1.3;
+      }
+      .item-btn.available {
+        background: linear-gradient(
+          135deg,
+          rgba(232, 213, 183, 0.5),
+          rgba(247, 239, 226, 0.9)
+        );
+        border-color: rgba(200, 146, 42, 0.22);
+        color: var(--brown);
+      }
+      .item-btn.available:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(200, 146, 42, 0.14),
+          rgba(201, 139, 133, 0.18)
+        );
+        border-color: var(--gold);
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(200, 146, 42, 0.2);
+      }
+      .item-btn.selected {
+        background: linear-gradient(
+          135deg,
+          var(--terracotta),
+          var(--dusty-rose)
+        );
+        border-color: var(--terracotta);
+        color: white;
+        box-shadow: 0 3px 10px rgba(196, 113, 74, 0.35);
+      }
+      .item-btn.taken {
+        background: rgba(200, 200, 200, 0.2);
+        border-color: rgba(150, 150, 150, 0.1);
+        color: #c0b0a0;
+        cursor: not-allowed;
+        text-decoration: line-through;
+        font-size: 0.72rem;
+      }
+      .selected-preview {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        background: linear-gradient(
+          135deg,
+          rgba(200, 146, 42, 0.09),
+          rgba(201, 139, 133, 0.09)
+        );
+        border: 1.5px dashed rgba(200, 146, 42, 0.36);
+        border-radius: 10px;
+        font-size: 0.88rem;
+        color: var(--brown);
+        font-family: "Lato", sans-serif;
+        margin-bottom: 14px;
+      }
+      .preview-item {
+        font-weight: 700;
+        color: var(--terracotta);
+      }
+      .clear-btn {
+        margin-left: auto;
+        color: var(--terracotta);
+        font-size: 0.75rem;
+        font-weight: 700;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background 0.2s;
+      }
+      .clear-btn:hover {
+        background: rgba(196, 113, 74, 0.1);
+      }
+      .submit-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(
+          135deg,
+          var(--terracotta),
+          var(--dusty-rose)
+        );
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-family: "Playfair Display", serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 18px rgba(196, 113, 74, 0.35);
+        letter-spacing: 0.5px;
+        margin-top: 8px;
+      }
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(196, 113, 74, 0.45);
+      }
+      .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(26px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .invite-card {
+        animation: fadeUp 0.7s ease both;
+      }
+      .rsvp-card {
+        animation: fadeUp 0.5s ease both;
+      }
+
+      /* ──────────────────────────────── */
+      /* RESPONSIVIDADE MOBILE            */
+      /* ──────────────────────────────── */
+      @media (max-width: 600px) {
+        .page {
+          padding: 15px;
+          padding-top: clamp(100px, 30vh, 150px);
+          padding-bottom: 20px;
+        }
+
+        /* ── SOL PARA MOBILE ── */
+        .sun-background {
+          top: 50px;
+          width: 200px;
+          height: 200px;
+        }
+
+        .sun-background::before {
+          inset: -80px;
+        }
+
+        /* ── CLOUDSS MOBILE ── */
+        .cloud-big .cld-shape {
+          width: 130px;
+          height: 42px;
+        }
+        .cloud-big .cld-shape::before {
+          width: 65px;
+          height: 55px;
+          top: -26px;
+          left: 18px;
+        }
+        .cloud-big .cld-shape::after {
+          width: 48px;
+          height: 42px;
+          top: -16px;
+          left: 65px;
+        }
+
+        .cloud-med .cld-shape {
+          width: 90px;
+          height: 30px;
+        }
+        .cloud-med .cld-shape::before {
+          width: 48px;
+          height: 40px;
+          top: -18px;
+          left: 10px;
+        }
+        .cloud-med .cld-shape::after {
+          width: 35px;
+          height: 30px;
+          top: -14px;
+          left: 45px;
+        }
+
+        .cloud-sm .cld-shape {
+          width: 65px;
+          height: 24px;
+        }
+        .cloud-sm .cld-shape::before {
+          width: 33px;
+          height: 32px;
+          top: -14px;
+          left: 7px;
+        }
+        .cloud-sm .cld-shape::after {
+          width: 25px;
+          height: 24px;
+          top: -10px;
+          left: 32px;
+        }
+
+        .cl1 {
+          top: 12%;
+        }
+        .cl2 {
+          top: 35%;
+        }
+        .cl3 {
+          top: 52%;
+        }
+        .cl4 {
+          top: 70%;
+        }
+        .cl7 {
+          top: 25%;
+        }
+        .cl8 {
+          top: 55%;
+        }
+
+        /* ── CARD MOBILE ── */
+        .invite-card {
+          max-width: 100%;
+          padding: 30px 20px 28px;
+        }
+
+        .invite-pretitle {
+          font-size: 0.85rem;
+          margin-bottom: 8px;
+        }
+        .invite-title {
+          font-size: 1.4rem;
+          margin-bottom: 3px;
+        }
+        .invite-name {
+          font-size: 2.6rem;
+          margin-bottom: 8px;
+        }
+        .invite-msg {
+          font-size: 0.95rem;
+          margin-bottom: 3px;
+        }
+
+        .boho-divider {
+          margin: 10px auto;
+        }
+        .boho-divider span {
+          font-size: 0.75rem;
+        }
+
+        .action-btns {
+          gap: 12px;
+          margin-top: 10px;
+        }
+        .action-btn {
+          padding: 16px 12px;
+          gap: 8px;
+          border-radius: 16px;
+        }
+        .action-icon {
+          width: 48px;
+          height: 48px;
+          font-size: 1.6rem;
+        }
+        .action-label {
+          font-size: 0.9rem;
+        }
+        .action-sublabel {
+          font-size: 0.65rem;
+        }
+
+        /* ── RSVP MOBILE ── */
+        .rsvp-card {
+          max-width: 100%;
+          padding: 24px 18px;
+          max-height: 85vh;
+        }
+
+        .back-btn {
+          font-size: 0.7rem;
+          padding: 6px 12px;
+          margin-bottom: 18px;
+        }
+
+        .rsvp-title {
+          font-size: 1.4rem;
+          margin-bottom: 4px;
+        }
+        .rsvp-subtitle {
+          font-size: 0.95rem;
+          margin-bottom: 12px;
+        }
+
+        .form-label {
+          font-size: 0.7rem;
+          margin-bottom: 6px;
+        }
+        input[type="text"] {
+          padding: 12px 14px;
+          font-size: 0.9rem;
+          margin-bottom: 12px;
+        }
+
+        .cat-toggle {
+          padding: 10px 12px;
+        }
+        .cat-name {
+          font-size: 0.8rem;
+        }
+        .cat-count {
+          font-size: 0.75rem;
+        }
+
+        .items-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 6px;
+        }
+        .item-btn {
+          padding: 8px 4px;
+          font-size: 0.7rem;
+        }
+
+        .selected-preview {
+          font-size: 0.8rem;
+          padding: 10px 12px;
+          margin-bottom: 12px;
+        }
+
+        .submit-btn {
+          padding: 14px;
+          font-size: 0.95rem;
+          margin-top: 6px;
+        }
+
+        #music-toggle {
+          bottom: 20px;
+          right: 20px;
+          width: 45px;
+          height: 45px;
+          font-size: 20px;
+        }
+      }
+
+      /* ──────────────────────────────── */
+      /* RESPONSIVIDADE TABLET            */
+      /* ──────────────────────────────── */
+      @media (min-width: 601px) and (max-width: 1024px) {
+        .page {
+          padding: 20px;
+          padding-top: clamp(120px, 20vh, 160px);
+        }
+
+        .sun-background {
+          top: -60px;
+          width: 300px;
+          height: 300px;
+        }
+
+        .invite-card {
+          max-width: 380px;
+          padding: 35px 28px;
+        }
+        .invite-name {
+          font-size: 3.2rem;
+        }
+
+        .rsvp-card {
+          max-width: 450px;
+          padding: 28px;
+        }
+
+        #music-toggle {
+          width: 48px;
+          height: 48px;
+          font-size: 22px;
+        }
+      }
+
+      /* ──────────────────────────────── */
+      /* RESPONSIVIDADE DESKTOP           */
+      /* ──────────────────────────────── */
+      @media (min-width: 1025px) {
+        .page {
+          padding-top: clamp(140px, 15vh, 180px);
+          padding-bottom: 40px;
+        }
+
+        .sun-background {
+          top: -80px;
+          width: 380px;
+          height: 380px;
+        }
+
+        .invite-card {
+          max-width: 460px;
+          padding: 48px 40px;
+        }
+        .invite-title {
+          font-size: 2rem;
+        }
+        .invite-name {
+          font-size: 4.2rem;
+        }
+        .invite-msg {
+          font-size: 1.2rem;
+        }
+
+        .action-btns {
+          gap: 18px;
+        }
+        .action-btn {
+          padding: 26px 18px;
+        }
+        .action-icon {
+          width: 62px;
+          height: 62px;
+          font-size: 2rem;
+        }
+
+        .rsvp-card {
+          max-width: 560px;
+          padding: 36px;
+        }
+        .rsvp-title {
+          font-size: 1.9rem;
+        }
+
+        #music-toggle {
+          width: 52px;
+          height: 52px;
+          font-size: 26px;
+        }
+      }
+
+      /* ──────────────────────────────── */
+      /* RESPONSIVIDADE NOTCHES (IPHONE)  */
+      /* ──────────────────────────────── */
+      @supports (padding: max(0px)) {
+        .page {
+          padding-top: max(20px, env(safe-area-inset-top));
+          padding-bottom: max(20px, env(safe-area-inset-bottom));
+          padding-left: max(20px, env(safe-area-inset-left));
+          padding-right: max(20px, env(safe-area-inset-right));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- BACKGROUND MUSIC -->
+    <audio id="bgAudio" muted loop style="display: none">
+      <source
+        src="./CHRISTINA PERRI - YOU ARE MY SUNSHINE [Lyric Video] - Warner Music Indonesia (youtube).mp3"
+        type="audio/mp3"
+      />
+    </audio>
+
+    <!-- MUSIC TOGGLE BUTTON -->
+    <button
+      id="music-toggle"
+      style="
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(200, 146, 42, 0.8);
+        border: 2px solid rgba(200, 146, 42, 1);
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(200, 146, 42, 0.3);
+      "
+      title="Ativar/pausar música"
+    >
+      🎵
+    </button>
+
+    <!-- SKY -->
+    <div class="sky-bg"></div>
+
+    <!-- BACKGROUND SUN -->
+    <div class="sun-background"></div>
+
+    <!-- DRIFTING CLOUDS -->
+    <div class="clouds-layer">
+      <div class="cld cl1 cloud-big"><div class="cld-shape"></div></div>
+      <div class="cld cl2 cloud-sm"><div class="cld-shape"></div></div>
+      <div class="cld cl3 cloud-med"><div class="cld-shape"></div></div>
+      <div class="cld cl4 cloud-big"><div class="cld-shape"></div></div>
+      <div class="cld cl5 cloud-sm"><div class="cld-shape"></div></div>
+      <div class="cld cl6 cloud-med"><div class="cld-shape"></div></div>
+      <div class="cld cl7 cloud-big"><div class="cld-shape"></div></div>
+      <div class="cld cl8 cloud-sm"><div class="cld-shape"></div></div>
+      <div class="cld cl9 cloud-med"><div class="cld-shape"></div></div>
+      <div class="cld cl10 cloud-big"><div class="cld-shape"></div></div>
+      <div class="cld cl11 cloud-sm"><div class="cld-shape"></div></div>
+    </div>
+
+    <!-- FLOATING PARTICLES -->
+    <div class="particles" id="particles"></div>
+
+    <!-- ── PAGE 1 ── -->
+    <div class="page active" id="page1">
+      <div class="invite-card">
+        <p class="invite-pretitle">você está convidado(a) para o</p>
+        <h1 class="invite-title">Chá de Fralda do</h1>
+        <div class="invite-name">Dante</div>
+        <div class="boho-divider" style="max-width: 260px"><span>✦</span></div>
+        <p class="invite-msg">
+          Venha celebrar conosco no dia<br />21 de março às 14:30!
+        </p>
+        <div class="boho-divider" style="max-width: 260px; margin-bottom: 24px">
+          <span>☀️</span>
+        </div>
+
+        <div class="action-btns">
+          <button class="action-btn confirmar" onclick="goToPage2()">
+            <div class="action-icon">🍼</div>
+            <span class="action-label">Confirmar</span>
+            <span class="action-sublabel">Presença</span>
+          </button>
+          <button class="action-btn localizacao" onclick="abrirMapa()">
+            <div class="action-icon">🗺️</div>
+            <span class="action-label">Localização</span>
+            <span class="action-sublabel">Ver no mapa</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PAGE 2 ── -->
+    <div class="page" id="page2">
+      <div class="rsvp-card">
+        <button class="back-btn" onclick="goToPage1()">
+          ← Voltar ao convite
+        </button>
+        <div style="text-align: center; margin-bottom: 18px">
+          <h2 class="rsvp-title">Chá de Fralda</h2>
+          <p class="rsvp-subtitle">Confirme sua presença</p>
+          <div class="boho-divider" style="max-width: 200px; margin: 0 auto 0">
+            <span>✦</span>
+          </div>
+        </div>
+
+        <form
+          id="form"
+          style="display: flex; flex-direction: column; gap: 14px"
+        >
+          <div>
+            <label class="form-label" for="nome">Seu nome</label>
+            <input
+              type="text"
+              id="nome"
+              placeholder="Ex: Maria da Silva"
+              required
+            />
+          </div>
+          <div>
+            <label class="form-label" style="margin-bottom: 10px"
+              >Escolha sua fralda
+            </label>
+            <div id="selected-preview" class="selected-preview">
+              ✔ Selecionado:
+              <span class="preview-item" id="preview-text"></span>
+              <button
+                type="button"
+                class="clear-btn"
+                onclick="clearSelection()"
+              >
+                ✕ trocar
+              </button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <div class="cat-block">
+                <button
+                  type="button"
+                  class="cat-toggle"
+                  onclick="toggleCat('p')"
+                >
+                  <div class="cat-toggle-left">
+                    <span class="tag tag-p">P</span>
+                    <span class="cat-name">Tamanho Pequeno</span>
+                    <span class="cat-count" id="count-p">15</span>
+                  </div>
+                  <span class="cat-arrow" id="arrow-p">▼</span>
+                </button>
+                <div class="cat-panel" id="panel-p">
+                  <div id="items-p" class="items-grid"></div>
+                </div>
+              </div>
+              <div class="cat-block">
+                <button
+                  type="button"
+                  class="cat-toggle"
+                  onclick="toggleCat('m')"
+                >
+                  <div class="cat-toggle-left">
+                    <span class="tag tag-m">M</span>
+                    <span class="cat-name">Tamanho Médio</span>
+                    <span class="cat-count" id="count-m">28</span>
+                  </div>
+                  <span class="cat-arrow" id="arrow-m">▼</span>
+                </button>
+                <div class="cat-panel" id="panel-m">
+                  <div id="items-m" class="items-grid"></div>
+                </div>
+              </div>
+              <div class="cat-block">
+                <button
+                  type="button"
+                  class="cat-toggle"
+                  onclick="toggleCat('g')"
+                >
+                  <div class="cat-toggle-left">
+                    <span class="tag tag-g">G</span>
+                    <span class="cat-name">Tamanho Grande</span>
+                    <span class="cat-count" id="count-g">7</span>
+                  </div>
+                  <span class="cat-arrow" id="arrow-g">▼</span>
+                </button>
+                <div class="cat-panel" id="panel-g">
+                  <div id="items-g" class="items-grid"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p
+            id="erro"
+            style="
+              display: none;
+              color: #c0392b;
+              font-size: 0.88rem;
+              font-weight: 700;
+              text-align: center;
+            "
+          ></p>
+          <button type="submit" id="confirm-btn" class="submit-btn">
+            🍼 Confirmar Presença
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const audio = document.getElementById("bgAudio");
+      const musicBtn = document.getElementById("music-toggle");
+      let isPlaying = false;
+      let hasInteracted = false;
+
+      function startMusic(event) {
+        if (!isPlaying && !hasInteracted) {
+          audio.muted = false;
+          audio.volume = 0.2;
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                musicBtn.textContent = "🔊";
+                isPlaying = true;
+                hasInteracted = true;
+                removeAllListeners();
+              })
+              .catch((error) => {
+                console.error("❌ Erro ao reproduzir áudio:", error);
+              });
+          } else {
+            musicBtn.textContent = "🔊";
+            isPlaying = true;
+            hasInteracted = true;
+            removeAllListeners();
+          }
+        }
+      }
+
+      function removeAllListeners() {
+        document.removeEventListener("click", startMusic);
+        document.removeEventListener("touchstart", startMusic);
+        document.removeEventListener("pointerdown", startMusic);
+      }
+
+      document.addEventListener("click", startMusic, false);
+      document.addEventListener("touchstart", startMusic, false);
+      document.addEventListener("pointerdown", startMusic, false);
+
+      musicBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (isPlaying) {
+          audio.pause();
+          musicBtn.textContent = "🎵";
+          isPlaying = false;
+        } else {
+          audio.muted = false;
+          audio.volume = 0.2;
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                musicBtn.textContent = "🔊";
+                isPlaying = true;
+              })
+              .catch((error) => {
+                console.error("❌ Erro ao reproduzir áudio:", error);
+              });
+          } else {
+            musicBtn.textContent = "🔊";
+            isPlaying = true;
+          }
+        }
+      });
+
+      // Floating particles
+      (function () {
+        const container = document.getElementById("particles");
+        const colors = [
+          "rgba(200,146,42,.4)",
+          "rgba(201,139,133,.4)",
+          "rgba(125,155,118,.4)",
+          "rgba(196,113,74,.3)",
+          "rgba(255,210,80,.4)",
+        ];
+        for (let i = 0; i < 22; i++) {
+          const p = document.createElement("div");
+          p.className = "particle";
+          const size = Math.random() * 6 + 3;
+          p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random() * 100}%;background:${colors[Math.floor(Math.random() * colors.length)]};animation-duration:${Math.random() * 14 + 10}s;animation-delay:${Math.random() * 12}s;`;
+          container.appendChild(p);
+        }
+      })();
+
+      // Navigation
+      function goToPage2() {
+        document.getElementById("page1").classList.remove("active");
+        document.getElementById("page2").classList.add("active");
+        window.scrollTo(0, 0);
+      }
+      function goToPage1() {
+        document.getElementById("page2").classList.remove("active");
+        document.getElementById("page1").classList.add("active");
+        window.scrollTo(0, 0);
+      }
+
+      function abrirMapa() {
+        if (typeof Swal !== "undefined") {
+          Swal.fire({
+            title: "🗺️ Localização do Evento",
+            html: '<p style="font-family:Lato,sans-serif;color:#5c3d1e;margin-bottom:0;">Abrindo o Google Maps...<br><span style="font-size:0.9rem;color:#7d9b76;">Você será redirecionado(a) para sua localização 📍</span></p>',
+            icon: "info",
+            confirmButtonColor: "#7d9b76",
+            confirmButtonText: "Ok, entendi!",
+            background: "#fdf8f0",
+            iconColor: "#7d9b76",
+            allowOutsideClick: false,
+            didOpen: () => {
+              setTimeout(() => {
+                window.open(
+                  "https://maps.app.goo.gl/pW4tda5wN3UTLWWV9",
+                  "_blank",
+                );
+              }, 300);
+            },
+          });
+        } else {
+          window.open("https://maps.app.goo.gl/pW4tda5wN3UTLWWV9", "_blank");
+        }
+      }
+
+      // RSVP logic
+      function makeItems(label, count) {
+        return Array.from({ length: count }, (_, i) => ({
+          key: label + "__" + i,
+          label: label,
+        }));
+      }
+      const itemsData = {
+        p: makeItems("Fralda P", 15),
+        m: makeItems("Fralda M", 28),
+        g: makeItems("Fralda G", 7),
+      };
+      const catState = { p: false, m: false, g: false };
+      let selectedItem = null,
+        selectedLabel = null,
+        itensOcupados = [];
+      const form = document.getElementById("form"),
+        confirmBtn = document.getElementById("confirm-btn"),
+        erroEl = document.getElementById("erro");
+
+      function toggleCat(cat) {
+        catState[cat] = !catState[cat];
+        document
+          .getElementById("panel-" + cat)
+          .classList.toggle("open", catState[cat]);
+        document
+          .getElementById("arrow-" + cat)
+          .classList.toggle("open", catState[cat]);
+      }
+
+      function updateCounts() {
+        const t = { p: 15, m: 28, g: 7 };
+        for (const [cat, total] of Object.entries(t)) {
+          const livres = itemsData[cat].filter(
+            (i) => !itensOcupados.includes(i.key),
+          ).length;
+          const el = document.getElementById("count-" + cat);
+          if (!el) continue;
+          el.textContent =
+            livres === 0 ? "Esgotado 🚫" : livres + " de " + total;
+          el.style.color = livres === 0 ? "#e57373" : "#a08060";
+        }
+      }
+
+      function clearSelection() {
+        selectedItem = null;
+        selectedLabel = null;
+        renderAll();
+        updatePreview();
+      }
+
+      function updatePreview() {
+        const preview = document.getElementById("selected-preview"),
+          pt = document.getElementById("preview-text");
+        if (selectedItem) {
+          preview.style.display = "flex";
+          pt.textContent = selectedLabel;
+          const m = {
+            "Fralda P": "p",
+            "Fralda M": "m",
+            "Fralda G": "g",
+          };
+          const cat = m[selectedLabel];
+          if (cat && catState[cat]) toggleCat(cat);
+        } else {
+          preview.style.display = "none";
+        }
+      }
+
+      function renderCategory(cat, items) {
+        const c = document.getElementById("items-" + cat);
+        if (!c) return;
+        c.innerHTML = "";
+        items.forEach((item) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = item.label;
+          const occ = itensOcupados.includes(item.key),
+            sel = selectedItem === item.key;
+          btn.className =
+            "item-btn " + (occ ? "taken" : sel ? "selected" : "available");
+          btn.disabled = occ;
+          btn.onclick = () => {
+            if (occ) return;
+            selectedItem = sel ? null : item.key;
+            selectedLabel = sel ? null : item.label;
+            renderAll();
+            updatePreview();
+          };
+          c.appendChild(btn);
+        });
+      }
+
+      function renderAll() {
+        ["p", "m", "g"].forEach((cat) => renderCategory(cat, itemsData[cat]));
+        updateCounts();
+      }
+
+      async function fetchItensOcupados() {
+        try {
+          const res = await fetch("/api/itens-escolhidos");
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          itensOcupados = data || [];
+          renderAll();
+        } catch (e) {
+          renderAll();
+        }
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const nome = document.getElementById("nome").value.trim();
+        if (!nome || !selectedItem) {
+          erroEl.textContent = "Preencha seu nome e escolha uma fralda!";
+          erroEl.style.display = "block";
+          return;
+        }
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = "Confirmando...";
+        erroEl.style.display = "none";
+        try {
+          const res = await fetch("/api/confirmar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nome, item: [selectedItem] }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error);
+          const nw = "5582999377018",
+            msg = "Oi! Já fiz minha confirmação no Chá de Fralda do Dante! ";
+          if (typeof Swal !== "undefined") {
+            Swal.fire({
+              title: "🍼 Confirmado!",
+              html:
+                '<p style="font-family:Lato,sans-serif;color:#5c3d1e;">Obrigada, <b>' +
+                nome +
+                "</b>!<br>Você escolheu: <b>" +
+                selectedLabel +
+                "</b><br><br>Você será redirecionado(a) para o WhatsApp 💛</p>",
+              icon: "success",
+              confirmButtonColor: "#c4714a",
+              confirmButtonText: "Ir para o WhatsApp",
+              background: "#fdf8f0",
+              iconColor: "#7d9b76",
+            }).then(() =>
+              window.open("https://wa.me/" + nw + "?text=" + msg, "_blank"),
+            );
+          } else {
+            alert("Obrigada, " + nome + "!");
+            window.open("https://wa.me/" + nw + "?text=" + msg, "_blank");
+          }
+          document.getElementById("nome").value = "";
+          selectedItem = null;
+          selectedLabel = null;
+          updatePreview();
+          fetchItensOcupados();
+        } catch (err) {
+          erroEl.textContent =
+            err.message || "Erro ao enviar. Tente novamente!";
+          erroEl.style.display = "block";
+        } finally {
+          confirmBtn.disabled = false;
+          confirmBtn.textContent = "🍼 Confirmar Presença";
+        }
+      });
+
+      fetchItensOcupados();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </body>
+</html>
