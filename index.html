@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chá de Fralda do Dante 🌿</title>
+    <title>Chá de Fralda do Dante</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Lato:wght@300;400;700&display=swap"
       rel="stylesheet"
@@ -56,7 +56,7 @@
       /* ── BACKGROUND SUN IMAGE ── */
       .sun-background {
         position: fixed;
-        top: -80px;
+        top: -70px;
         left: 50%;
         transform: translateX(-50%);
         width: 350px;
@@ -870,10 +870,10 @@
         <div class="invite-name">Dante</div>
         <div class="boho-divider" style="max-width: 260px"><span>✦</span></div>
         <p class="invite-msg">
-          Venha celebrar conosco a chegada<br />do nosso pequeno raio de sol 🌿
+          Venha celebrar conosco a chegada<br />do nosso pequeno sunshine
         </p>
         <div class="boho-divider" style="max-width: 260px; margin-bottom: 24px">
-          <span>🌾</span>
+          <span>☀️</span>
         </div>
 
         <div class="action-btns">
@@ -882,15 +882,11 @@
             <span class="action-label">Confirmar</span>
             <span class="action-sublabel">Presença</span>
           </button>
-          <a
-            class="action-btn localizacao"
-            href="https://maps.app.goo.gl/pW4tda5wN3UTLWWV9"
-            target="_blank"
-          >
+          <button class="action-btn localizacao" onclick="abrirMapa()">
             <div class="action-icon">🗺️</div>
             <span class="action-label">Localização</span>
             <span class="action-sublabel">Ver no mapa</span>
-          </a>
+          </button>
         </div>
       </div>
     </div>
@@ -903,7 +899,7 @@
         </button>
         <div style="text-align: center; margin-bottom: 16px">
           <h2 class="rsvp-title">Chá de Fralda</h2>
-          <p class="rsvp-subtitle">Confirme sua presença 🌿</p>
+          <p class="rsvp-subtitle">Confirme sua presença</p>
           <div class="boho-divider" style="max-width: 200px; margin: 0 auto 0">
             <span>✦</span>
           </div>
@@ -924,8 +920,8 @@
           </div>
           <div>
             <label class="form-label" style="margin-bottom: 10px"
-              >Escolha sua fralda 🌸</label
-            >
+              >Escolha sua fralda
+            </label>
             <div id="selected-preview" class="selected-preview">
               ✔ Selecionado:
               <span class="preview-item" id="preview-text"></span>
@@ -1019,6 +1015,31 @@
         document.getElementById("page2").classList.remove("active");
         document.getElementById("page1").classList.add("active");
         window.scrollTo(0, 0);
+      }
+
+      function abrirMapa() {
+        if (typeof Swal !== "undefined") {
+          Swal.fire({
+            title: "🗺️ Localização do Evento",
+            html: '<p style="font-family:Lato,sans-serif;color:#5c3d1e;margin-bottom:0;">Abrindo o Google Maps...<br><span style="font-size:0.9rem;color:#7d9b76;">Você será redirecionado(a) para sua localização 📍</span></p>',
+            icon: "info",
+            confirmButtonColor: "#7d9b76",
+            confirmButtonText: "Ok, entendi!",
+            background: "#fdf8f0",
+            iconColor: "#7d9b76",
+            allowOutsideClick: false,
+            didOpen: () => {
+              setTimeout(() => {
+                window.open(
+                  "https://maps.app.goo.gl/pW4tda5wN3UTLWWV9",
+                  "_blank",
+                );
+              }, 300);
+            },
+          });
+        } else {
+          window.open("https://maps.app.goo.gl/pW4tda5wN3UTLWWV9", "_blank");
+        }
       }
 
       // Floating particles
@@ -1128,9 +1149,7 @@
         });
       }
       function renderAll() {
-        ["p", "m", "g"].forEach((cat) =>
-          renderCategory(cat, itemsData[cat]),
-        );
+        ["p", "m", "g"].forEach((cat) => renderCategory(cat, itemsData[cat]));
         updateCounts();
       }
       async function fetchItensOcupados() {
@@ -1183,21 +1202,15 @@
                 "</b><br><br>Você será redirecionado(a) para o WhatsApp 💛</p>",
               icon: "success",
               confirmButtonColor: "#c4714a",
-              confirmButtonText: "Ir para o WhatsApp 🌿",
+              confirmButtonText: "Ir para o WhatsApp ",
               background: "#fdf8f0",
               iconColor: "#7d9b76",
             }).then(() =>
-              window.open(
-                "https://wa.me/" + nw + "?text=" + msg,
-                "_blank",
-              ),
+              window.open("https://wa.me/" + nw + "?text=" + msg, "_blank"),
             );
           } else {
             alert("Obrigada, " + nome + "!");
-            window.open(
-              "https://wa.me/" + nw + "?text=" + msg,
-              "_blank",
-            );
+            window.open("https://wa.me/" + nw + "?text=" + msg, "_blank");
           }
           document.getElementById("nome").value = "";
           selectedItem = null;
