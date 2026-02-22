@@ -259,6 +259,80 @@
         }
       }
 
+      @media (max-width: 768px) {
+        .page {
+          padding: 80px 20px 40px;
+        }
+
+        /* Redistribuir nuvens no mobile - evitar aglomeração acima do sol */
+        .cl1 {
+          top: 10%;
+        }
+        .cl2 {
+          top: 28%;
+        }
+        .cl3 {
+          top: 45%;
+        }
+        .cl7 {
+          top: 35%;
+        }
+        .cl8 {
+          top: 55%;
+        }
+
+        .cloud-big .cld-shape {
+          width: 150px;
+          height: 48px;
+        }
+        .cloud-big .cld-shape::before {
+          width: 75px;
+          height: 62px;
+          top: -30px;
+          left: 20px;
+        }
+        .cloud-big .cld-shape::after {
+          width: 55px;
+          height: 48px;
+          top: -22px;
+          left: 75px;
+        }
+
+        .cloud-med .cld-shape {
+          width: 100px;
+          height: 35px;
+        }
+        .cloud-med .cld-shape::before {
+          width: 55px;
+          height: 48px;
+          top: -22px;
+          left: 12px;
+        }
+        .cloud-med .cld-shape::after {
+          width: 40px;
+          height: 35px;
+          top: -16px;
+          left: 52px;
+        }
+
+        .cloud-sm .cld-shape {
+          width: 70px;
+          height: 26px;
+        }
+        .cloud-sm .cld-shape::before {
+          width: 38px;
+          height: 34px;
+          top: -15px;
+          left: 8px;
+        }
+        .cloud-sm .cld-shape::after {
+          width: 28px;
+          height: 26px;
+          top: -11px;
+          left: 36px;
+        }
+      }
+
       /* ── FLOATING PARTICLES ── */
       .particles {
         position: fixed;
@@ -293,12 +367,13 @@
       .page {
         position: relative;
         z-index: 10;
-        min-height: 100vh;
+        height: 100vh;
         display: none;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 40px 20px;
+        padding: 160px 20px 40px;
+        overflow: hidden;
       }
       .page.active {
         display: flex;
@@ -323,12 +398,15 @@
       }
       .invite-card {
         max-width: 400px;
-        padding: 36px 32px 42px;
+        padding: 24px 28px 28px;
         text-align: center;
       }
       .rsvp-card {
         max-width: 480px;
-        padding: 36px 28px 32px;
+        padding: 24px 24px 20px;
+        max-height: 85vh;
+        overflow-y: auto;
+        overflow-x: hidden;
       }
       .invite-card::before,
       .rsvp-card::before {
@@ -801,6 +879,120 @@
     </style>
   </head>
   <body>
+    <!-- BACKGROUND MUSIC -->
+    <audio id="bgAudio" muted loop style="display: none">
+      <source
+        src="CHRISTINA PERRI - YOU ARE MY SUNSHINE [Lyric Video] - Warner Music Indonesia (720p, h264, youtube).mp4"
+        type="audio/mp4"
+      />
+    </audio>
+
+    <!-- MUSIC TOGGLE BUTTON -->
+    <button
+      id="music-toggle"
+      style="
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(200, 146, 42, 0.8);
+        border: 2px solid rgba(200, 146, 42, 1);
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(200, 146, 42, 0.3);
+      "
+      title="Ativar/pausar música"
+    >
+      🎵
+    </button>
+
+    <script>
+      const audio = document.getElementById("bgAudio");
+      const musicBtn = document.getElementById("music-toggle");
+      let isPlaying = false;
+      let hasInteracted = false;
+
+      // Função para iniciar a música
+      function startMusic(event) {
+        if (!isPlaying && !hasInteracted) {
+          audio.muted = false;
+          audio.volume = 0.2;
+          
+          const playPromise = audio.play();
+          
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                musicBtn.textContent = "🔊";
+                isPlaying = true;
+                hasInteracted = true;
+                console.log("✅ Música iniciada com sucesso");
+                // Remove listeners após primeira interação bem-sucedida
+                removeAllListeners();
+              })
+              .catch((error) => {
+                console.error("❌ Erro ao reproduzir áudio:", error);
+              });
+          } else {
+            musicBtn.textContent = "🔊";
+            isPlaying = true;
+            hasInteracted = true;
+            removeAllListeners();
+          }
+        }
+      }
+
+      function removeAllListeners() {
+        document.removeEventListener("click", startMusic);
+        document.removeEventListener("touchstart", startMusic);
+        document.removeEventListener("pointerdown", startMusic);
+      }
+
+      // Detectar apenas interações válidas para autoplay (click, tap)
+      // Scroll (wheel/touchmove) não funciona com autoplay policy dos navegadores
+      document.addEventListener("click", startMusic, false);
+      document.addEventListener("touchstart", startMusic, false);
+      document.addEventListener("pointerdown", startMusic, false);
+
+      // Toggle manual do botão
+      musicBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); // Evitar disparar startMusic
+        if (isPlaying) {
+          audio.pause();
+          musicBtn.textContent = "🎵";
+          isPlaying = false;
+        } else {
+          audio.muted = false;
+          audio.volume = 0.2;
+          
+          const playPromise = audio.play();
+          
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                musicBtn.textContent = "🔊";
+                isPlaying = true;
+                console.log("✅ Música iniciada manualmente");
+              })
+              .catch((error) => {
+                console.error("❌ Erro ao reproduzir áudio:", error);
+              });
+          } else {
+            musicBtn.textContent = "🔊";
+            isPlaying = true;
+          }
+        }
+      });
+    </script>
+
     <!-- SKY -->
     <div class="sky-bg"></div>
 
@@ -828,49 +1020,12 @@
     <!-- ── PAGE 1 ── -->
     <div class="page active" id="page1">
       <div class="invite-card">
-        <svg class="corner-deco tl" viewBox="0 0 72 72" fill="none">
-          <path
-            d="M7 65 Q7 7 65 7"
-            stroke="#c8922a"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-          />
-          <path
-            d="M17 65 Q17 17 65 17"
-            stroke="#7d9b76"
-            stroke-width="1.5"
-            fill="none"
-            stroke-linecap="round"
-          />
-          <circle cx="7" cy="65" r="3" fill="#c8922a" />
-          <circle cx="65" cy="7" r="3" fill="#7d9b76" />
-        </svg>
-        <svg class="corner-deco br" viewBox="0 0 72 72" fill="none">
-          <path
-            d="M7 65 Q7 7 65 7"
-            stroke="#c8922a"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-          />
-          <path
-            d="M17 65 Q17 17 65 17"
-            stroke="#7d9b76"
-            stroke-width="1.5"
-            fill="none"
-            stroke-linecap="round"
-          />
-          <circle cx="7" cy="65" r="3" fill="#c8922a" />
-          <circle cx="65" cy="7" r="3" fill="#7d9b76" />
-        </svg>
-
         <p class="invite-pretitle">você está convidado(a) para o</p>
-        <h1 class="invite-title">Chá de Fralda</h1>
+        <h1 class="invite-title">Chá de Fralda do</h1>
         <div class="invite-name">Dante</div>
         <div class="boho-divider" style="max-width: 260px"><span>✦</span></div>
         <p class="invite-msg">
-          Venha celebrar conosco a chegada<br />do nosso pequeno sunshine
+          Venha celebrar conosco no dia<br />21 de março às 14:30!
         </p>
         <div class="boho-divider" style="max-width: 260px; margin-bottom: 24px">
           <span>☀️</span>
