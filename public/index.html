@@ -1221,7 +1221,7 @@
         <div class="invite-name">Dante</div>
         <div class="boho-divider" style="max-width: 260px"><span>✦</span></div>
         <p class="invite-msg">
-          Venha celebrar conosco no dia<br />21 de março às 14:30!
+          Venha celebrar conosco no dia<br />22 de março às 14:30!
         </p>
         <div class="boho-divider" style="max-width: 260px; margin-bottom: 24px">
           <span>☀️</span>
@@ -1616,6 +1616,44 @@
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
         const nome = document.getElementById("nome").value.trim();
+        
+        // Lista de palavras proibidas
+        const forbiddenWords = [
+          'taça no ku', 'taca no ku', 'taça no cu', 'taca no cu', 'taça no cú',
+          'merda', 'porra', 'caralho', 'puta', 'viado', 'pinto', 'buceta', 'cu', 'cú',
+          'foda', 'foder', 'fdp', 'vsf', 'arrombado', 'babaca', 'cuzão', 'desgraça',
+          'lixo', 'otario', 'otário', 'palhaço', 'retardado', 'vagabundo', 'vagabunda',
+          'aborto', 'amador', 'ânus', 'aranha', 'ariano', 'balalao', 'bastardo', 'bicha',
+          'biscate', 'bissexual', 'boceta', 'boob', 'bosta', 'braulio de borracha',
+          'bumbum', 'burro', 'cabrao', 'cacete', 'cagar', 'camisinha', 'caralho',
+          'cerveja', 'chochota', 'chupar', 'clitoris', 'cocaína', 'coito', 'colhoes',
+          'comer', 'cona', 'consolo', 'corno', 'cu', 'dar o rabo', 'dum raio',
+          'esporra', 'fecal', 'filho da puta', 'foda', 'foda-se', 'foder', 'frango assado',
+          'gozar', 'grelho', 'heroína', 'heterosexual', 'homem gay', 'homoerótico',
+          'homosexual', 'inferno', 'lésbica', 'lolita', 'mama', 'merda', 'paneleiro',
+          'passar um cheque', 'pau', 'peidar', 'pênis', 'pinto', 'porra', 'puta',
+          'puta que pariu', 'puta que te pariu', 'queca', 'sacanagem', 'saco', 'torneira',
+          'transar', 'vadia', 'vai-te foder', 'vai tomar no cu', 'veado', 'vibrador',
+          'xana', 'xochota', 'gay', 'yag', 'trans', 'transgenero', 'transante',
+          'fuck', 'shit', 'bitch', 'ass', 'dick', 'pussy', 'sex', 'anal', 'oral',
+          'condom', 'prostitute', 'whore', 'slut', 'bastard', 'idiot', 'stupid',
+          'teste', 'demo', 'admin', 'root', 'null', 'undefined', '123456', "gay", "yag", "trans", "sexo",
+          "sqsu", "sexual", "ku", "cu", "mongol", "negro", "negão", "negao", "piroca", "pinto","bucetinha", "bucetao",
+          "bct"
+        ];
+        
+        // Verificar se o nome contém palavras proibidas
+        const nomeLower = nome.toLowerCase();
+        const hasForbiddenWord = forbiddenWords.some(word => 
+          nomeLower.includes(word.toLowerCase())
+        );
+        
+        if (hasForbiddenWord) {
+          erroEl.textContent = "Nome contém conteúdo inadequado. Por favor, seja adulto(a).";
+          erroEl.style.display = "block";
+          return;
+        }
+        
         if (!nome || !selectedItem) {
           erroEl.textContent = "Preencha seu nome e escolha uma fralda!";
           erroEl.style.display = "block";
